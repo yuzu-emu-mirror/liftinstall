@@ -101,7 +101,7 @@ fn main() {
         .spawn()
         .unwrap()
         .wait().expect("Unable to install Node.JS dependencies using Yarn");
-    Command::new(&yarn_binary)
+    let return_code = Command::new(&yarn_binary)
         .args(&[
             "--cwd",
             ui_dir.to_str().expect("Unable to covert path"),
@@ -113,7 +113,7 @@ fn main() {
                 .to_str()
                 .expect("Unable to convert path"),
         ])
-        .spawn()
-        .unwrap()
-        .wait().expect("Unable to build frontend assets using Webpack");
+        .status()
+        .expect("Unable to build frontend assets using Webpack");
+    assert!(return_code.success());
 }
