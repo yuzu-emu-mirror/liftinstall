@@ -20,6 +20,6 @@ jobs:
         node-version: '10.x'
     - run: npm install -g yarn
     
-    - uses: actions/checkout@latest
+    - uses: actions/checkout@v1
     - name: Build
       run: cargo build --verbose
