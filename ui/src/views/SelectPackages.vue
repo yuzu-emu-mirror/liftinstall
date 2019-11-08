@@ -1,6 +1,6 @@
 <template>
     <div class="column has-padding">
-            <h4 class="subtitle">Select which packages you want to install:</h4>
+            <h4 class="subtitle">{{ $t('select_packages.title') }}</h4>
 
             <!-- Build options -->
             <div class="tile is-ancestor">
@@ -11,7 +11,7 @@
                                 <b-checkbox v-model="Lpackage.default">
                                   {{ Lpackage.name }}
                                 </b-checkbox>
-                                <span v-if="Lpackage.installed"><i>(installed)</i></span>
+                                <span v-if="Lpackage.installed"><i>{{ $t('select_packages.installed') }}</i></span>
                             </label>
                             <p>
                                 {{ Lpackage.description }}
@@ -21,15 +21,15 @@
                 </div>
             </div>
 
-            <div class="subtitle is-6" v-if="!$root.$data.metadata.preexisting_install && advanced">Install Location</div>
+            <div class="subtitle is-6" v-if="!$root.$data.metadata.preexisting_install && advanced">{{ $t('select_packages.location') }}</div>
             <div class="field has-addons" v-if="!$root.$data.metadata.preexisting_install && advanced">
                 <div class="control is-expanded">
                     <input class="input" type="text" v-model="$root.$data.install_location"
-                           placeholder="Enter a install path here">
+                           :placeholder="$t('select_packages.location_placeholder')">
                 </div>
                 <div class="control">
                     <a class="button is-dark" v-on:click="select_file">
-                        Select
+                        {{ $t('select_packages.select') }}
                     </a>
                 </div>
             </div>
@@ -38,15 +38,15 @@
                 <div class="field is-grouped">
                     <p class="control">
                         <a class="button is-medium" v-if="!$root.$data.config.hide_advanced && !$root.$data.metadata.preexisting_install && !advanced"
-                           v-on:click="advanced = true">Advanced...</a>
+                           v-on:click="advanced = true">{{ $t('select_packages.advanced') }}</a>
                     </p>
                     <p class="control">
                         <a class="button is-dark is-medium" v-if="!$root.$data.metadata.preexisting_install"
-                           v-on:click="install">Install</a>
+                           v-on:click="install">{{ $t('select_packages.install') }}</a>
                     </p>
                     <p class="control">
                         <a class="button is-dark is-medium" v-if="$root.$data.metadata.preexisting_install"
-                           v-on:click="install">Modify</a>
+                           v-on:click="install">{{ $t('select_packages.modify') }}</a>
                     </p>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             <div class="field is-grouped is-left-floating is-bottom-floating">
                 <p class="control">
                     <a class="button is-medium" v-if="$root.$data.metadata.preexisting_install"
-                       v-on:click="go_back">Back</a>
+                       v-on:click="go_back">{{ $t('back') }}</a>
                 </p>
             </div>
         </div>

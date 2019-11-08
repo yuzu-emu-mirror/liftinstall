@@ -9,14 +9,14 @@
                         <br />
 
                         <h2 class="subtitle" v-if="!$root.$data.metadata.preexisting_install">
-                            Welcome to the {{ $root.$data.attrs.name }} installer!
+                            {{ $t('app.installer_title', {'name': $root.$data.attrs.name}) }}
                         </h2>
                         <h2 class="subtitle" v-if="!$root.$data.metadata.preexisting_install">
-                            We will have you up and running in just a few moments.
+                            {{ $t('app.installer_subtitle') }}
                         </h2>
 
                         <h2 class="subtitle" v-if="$root.$data.metadata.preexisting_install">
-                            Welcome to the {{ $root.$data.attrs.name }} Maintenance Tool.
+                            {{ $t('app.maintenance_title', {'name': $root.$data.attrs.name}) }}
                         </h2>
                     </div>
 

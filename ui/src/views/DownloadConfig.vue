@@ -1,6 +1,6 @@
 <template>
     <div class="column has-padding">
-            <h4 class="subtitle">Downloading config...</h4>
+            <h4 class="subtitle">{{ $t('download_config.download_config') }}</h4>
 
             <br />
             <progress class="progress is-info is-medium" max="100">
@@ -39,8 +39,7 @@ export default {
           that.$root.exit()
         } else {
           that.$router.replace({ name: 'showerr',
-            params: { msg: 'Got error while downloading config: ' +
-                                e } })
+            params: { msg: this.$i18n.t('download_config.error_download_config', { msg: e }) } })
         }
       })
     },

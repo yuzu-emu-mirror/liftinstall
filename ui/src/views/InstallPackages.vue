@@ -1,9 +1,9 @@
 <template>
     <div class="column has-padding">
-            <h4 class="subtitle" v-if="$root.$data.metadata.is_launcher || is_update">Checking for updates...</h4>
-            <h4 class="subtitle" v-else-if="is_uninstall">Uninstalling...</h4>
-            <h4 class="subtitle" v-else-if="is_updater_update">Downloading self-update...</h4>
-            <h4 class="subtitle" v-else>Installing...</h4>
+            <h4 class="subtitle" v-if="$root.$data.metadata.is_launcher || is_update">{{ $t('install_packages.check_for_update') }}</h4>
+            <h4 class="subtitle" v-else-if="is_uninstall">{{ $t('install_packages.uninstall') }}</h4>
+            <h4 class="subtitle" v-else-if="is_updater_update">{{ $t('install_packages.self_update') }}</h4>
+            <h4 class="subtitle" v-else>{{ $t('install_packages.install') }}</h4>
             <div v-html="$root.$data.config.installing_message"></div>
             <br />
 
@@ -20,7 +20,7 @@ export default {
   data: function () {
     return {
       progress: 0.0,
-      progress_message: 'Please wait...',
+      progress_message: this.$i18n.t('install_packages.please_wait'),
       is_uninstall: false,
       is_updater_update: false,
       is_update: false,
