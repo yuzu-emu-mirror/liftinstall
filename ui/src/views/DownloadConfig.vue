@@ -38,8 +38,10 @@ export default {
           // Just launch the target application
           that.$root.exit()
         } else {
-          that.$router.replace({ name: 'showerr',
-            params: { msg: this.$i18n.t('download_config.error_download_config', { msg: e }) } })
+          that.$router.replace({
+            name: 'showerr',
+            params: { msg: this.$i18n.t('download_config.error_download_config', { msg: e }) }
+          })
         }
       })
     },

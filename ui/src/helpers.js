@@ -41,7 +41,7 @@ export function ajax (path, successCallback, failCallback, data) {
     var form = ''
 
     for (var key in data) {
-      if (!data.hasOwnProperty(key)) {
+      if (!Object.prototype.hasOwnProperty.call(data, key)) {
         continue
       }
 
@@ -116,7 +116,7 @@ export function stream_ajax (path, callback, successCallback, failCallback, data
     var form = ''
 
     for (var key in data) {
-      if (!data.hasOwnProperty(key)) {
+      if (!Object.prototype.hasOwnProperty.call(data, key)) {
         continue
       }
 

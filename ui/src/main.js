@@ -85,7 +85,7 @@ window.addEventListener('keydown', disableShortcuts)
 
 axios.get('/api/attrs').then(function (resp) {
   document.getElementById('window-title').innerText =
-    i18n.t('app.window_title', { 'name': resp.data.name })
+    i18n.t('app.window_title', { name: resp.data.name })
 }).catch(function (err) {
   console.error(err)
 })
@@ -127,12 +127,14 @@ var app = new Vue({
         var searchLocation = app.metadata.install_path.length > 0 ? app.metadata.install_path
           : i18n.t('error.location_unknown')
 
-        app.$router.replace({ name: 'showerr',
-          params: { msg: i18n.t('error.exit_error', {
-            'name': app.attrs.name,
-            'path': searchLocation,
-            'msg': msg
-          })
+        app.$router.replace({
+          name: 'showerr',
+          params: {
+            msg: i18n.t('error.exit_error', {
+              name: app.attrs.name,
+              path: searchLocation,
+              msg: msg
+            })
           }
         })
       })

@@ -49,7 +49,7 @@ export default {
         }
       }
 
-      results['path'] = app.install_location
+      results.path = app.install_location
 
       var targetUrl = '/api/start-install'
       if (this.is_uninstall) {
@@ -62,16 +62,16 @@ export default {
       this.$root.stream_ajax(targetUrl, function (line) {
         // On progress line received from server
 
-        if (line.hasOwnProperty('Status')) {
+        if (Object.prototype.hasOwnProperty.call(line, 'Status')) {
           that.progress_message = line.Status[0]
           that.progress = line.Status[1] * 100
         }
 
-        if (line.hasOwnProperty('PackageInstalled')) {
+        if (Object.prototype.hasOwnProperty.call(line, 'PackageInstalled')) {
           that.packages_installed += 1
         }
 
-        if (line.hasOwnProperty('Error')) {
+        if (Object.prototype.hasOwnProperty.call(line, 'Error')) {
           that.failed_with_error = true
           that.$router.replace({ name: 'showerr', params: { msg: line.Error } })
         }
@@ -94,19 +94,23 @@ export default {
             app.exit()
           } else if (!that.failed_with_error) {
             if (that.is_uninstall) {
-              that.$router.replace({ name: 'complete',
+              that.$router.replace({
+                name: 'complete',
                 params: {
                   uninstall: true,
                   update: that.is_update,
                   installed: that.packages_installed
-                } })
+                }
+              })
             } else {
-              that.$router.replace({ name: 'complete',
+              that.$router.replace({
+                name: 'complete',
                 params: {
                   uninstall: false,
                   update: that.is_update,
                   installed: that.packages_installed
-                } })
+                }
+              })
             }
           }
         }
