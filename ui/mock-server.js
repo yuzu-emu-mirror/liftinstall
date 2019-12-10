@@ -4,7 +4,15 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+let showError = false
+
 function progressSimulation (res) {
+  if (showError) {
+    var resp = JSON.stringify({ Error: 'Simulated error.' }) + '\n'
+    res.write(resp)
+    res.status(200).end()
+    return
+  }
   var progress = 0.0
   var timer = setInterval(() => {
     var resp = JSON.stringify({ Status: ['Processing...', progress] }) + '\n'
@@ -18,6 +26,10 @@ function progressSimulation (res) {
 }
 
 function returnConfig (res) {
+  if (showError) {
+    res.status(500).json({})
+    return
+  }
   res.json({
     installing_message:
       'Test Banner <strong>Bold</strong>&nbsp;<pre>Code block</pre>&nbsp;<i>Italic</i>&nbsp;<del>Strike</del>',
@@ -52,6 +64,7 @@ function returnConfig (res) {
 }
 
 app.get('/api/attrs', (req, res) => {
+  console.log('-- Get attrs')
   res.send(
     { name: 'yuzu', target_url: 'https://raw.githubusercontent.com/j-selby/test-installer/master/config.linux.v2.toml' }
   )
@@ -88,7 +101,17 @@ app.post('/api/start-install', (req, res) => {
 
 app.get('/api/exit', (req, res) => {
   console.log('-- Exit')
+  if (showError) {
+    res.status(500).send('Simulated error: Nothing to see here.')
+    return
+  }
   res.status(204)
+})
+
+app.get('/api/mock_error', (req, res) => {
+  console.log('-- Toggle error emulation')
+  showError = !showError
+  res.status(200).send(`Error emulation: ${showError}\n`)
 })
 
 console.log(`Listening on ${port}...`)
