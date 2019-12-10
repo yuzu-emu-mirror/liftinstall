@@ -5,8 +5,8 @@
     </b-message>
     <div class="field is-grouped is-right-floating" v-bind:class="{ 'is-bottom-floating': !$root.$data.metadata.is_launcher, 'is-top-floating': $root.$data.metadata.is_launcher }">
       <p class="control">
-        <a class="button is-primary is-medium" v-if="remaining && !$root.$data.metadata.is_launcher" v-on:click="go_back">{{ $t('back') }}</a>
-        <a class="button is-primary is-medium" v-if="$root.$data.metadata.is_launcher" v-on:click="exit">{{ $t('exit') }}</a>
+        <b-button class="is-primary is-medium" v-if="remaining && !$root.$data.metadata.is_launcher" v-on:click="go_back">{{ $t('back') }}</b-button>
+        <b-button class="is-primary is-medium" v-if="$root.$data.metadata.is_launcher" v-on:click="exit">{{ $t('exit') }}</b-button>
       </p>
     </div>
   </div>

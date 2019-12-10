@@ -23,7 +23,7 @@
 
             <div class="field is-grouped is-right-floating is-bottom-floating">
                 <p class="control">
-                    <a class="button is-dark is-medium" v-on:click="exit">{{ $t('exit') }}</a>
+                    <b-button class="is-dark is-medium" v-on:click="exit">{{ $t('exit') }}</b-button>
                 </p>
             </div>
     </div>

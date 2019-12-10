@@ -2,21 +2,21 @@
     <div class="column has-padding">
             <h4 class="subtitle">{{ $t('modify.title') }}</h4>
 
-            <a class="button is-dark is-medium" v-on:click="update">
+            <b-button class="is-dark is-medium" v-on:click="update">
                 {{ $t('modify.update') }}
-            </a>
+            </b-button>
             <br />
             <br />
 
-            <a class="button is-dark is-medium" v-on:click="modify_packages">
+            <b-button class="is-dark is-medium" v-on:click="modify_packages">
                 {{ $t('modify.modify') }}
-            </a>
+            </b-button>
             <br />
             <br />
 
-            <a class="button is-dark is-medium" v-on:click="prepare_uninstall">
+            <b-button class="is-dark is-medium" v-on:click="prepare_uninstall">
                 {{ $t('modify.uninstall') }}
-            </a>
+            </b-button>
 
             <div class="modal is-active" v-if="show_uninstall">
                 <div class="modal-background"></div>
