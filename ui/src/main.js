@@ -6,7 +6,7 @@ import VueAxios from 'vue-axios'
 import VueI18n from 'vue-i18n'
 import { stream_ajax as streamAjax } from './helpers'
 import Buefy from 'buefy'
-import messages from './locales/messages.js'
+import messages from './locales/messages.json'
 import 'buefy/dist/buefy.css'
 
 Vue.config.productionTip = false

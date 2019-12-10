@@ -1,0 +1,55 @@
+{
+  "en":{
+    "locale":"English",
+    "app":{
+      "installer_title":"Welcome to the {name} installer!",
+      "installer_subtitle":"We will have you up and running in just a few moments.",
+      "maintenance_title":"Welcome to the {name} Maintenance Tool.",
+      "window_title":"{name} Installer"
+    },
+    "download_config":{
+      "download_config":"Downloading config...",
+      "error_download_config":"Got error while downloading config: {msg}"
+    },
+    "select_packages":{
+      "title":"Select which packages you want to install:",
+      "installed":"(installed)",
+      "advanced":"Advanced...",
+      "install":"Install",
+      "modify":"Modify",
+      "location":"Install Location",
+      "location_placeholder":"Enter a install path here",
+      "select":"Select"
+    },
+    "install_packages":{
+      "check_for_update":"Checking for updates...",
+      "uninstall":"Uninstalling...",
+      "self_update":"Downloading self-update...",
+      "install":"Installing...",
+      "please_wait":"Please wait..."
+    },
+    "error":{
+      "title":"An error occurred",
+      "exit_error":"{msg}\n\nPlease upload the log file (in {path}) to the {name} team",
+      "location_unknown":"the location where this installer is"
+    },
+    "complete":{
+      "thanks":"Thanks for installing {name}!",
+      "up_to_date":"{name} is already up to date!",
+      "updated":"{name} has been updated.",
+      "uninstalled":"{name} has been uninstalled.",
+      "where_to_find":"You can find your installed applications in your start menu."
+    },
+    "modify":{
+      "title":"Choose an option:",
+      "update":"Update",
+      "modify":"Modify",
+      "uninstall":"Uninstall",
+      "prompt":"Are you sure you want to uninstall {name}?"
+    },
+    "back":"Back",
+    "exit":"Exit",
+    "yes":"Yes",
+    "no":"No"
+  }
+}
