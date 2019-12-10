@@ -40,7 +40,7 @@ export default {
         } else {
           that.$router.replace({
             name: 'showerr',
-            params: { msg: this.$i18n.t('download_config.error_download_config', { msg: e }) }
+            params: { msg: that.$i18n.t('download_config.error_download_config', { msg: e }) }
           })
         }
       })
