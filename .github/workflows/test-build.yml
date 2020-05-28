@@ -5,18 +5,25 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: windows-latest
-        
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
     steps:
     - uses: hecrj/setup-rust-action@master
       with:
         rust-version: stable
-        
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.0-dev libssl-dev
+      if: runner.os == 'Linux'
+
     - uses: actions/setup-node@v1
       with:
-        node-version: '10.x'
+        node-version: '12.x'
     - run: npm install -g yarn
-    
-    - uses: actions/checkout@v1
+
+    - uses: actions/checkout@v2
     - name: Build
       run: cargo build --verbose
