@@ -81,8 +81,30 @@ export default {
         }
       }))
     },
+    show_overwrite_dialog: function (confirmCallback) {
+      this.$buefy.dialog.confirm({
+        title: 'Overwriting',
+        message: `Directory ${this.$root.$data.install_location} already exists.<br>
+        Are you sure you want to <b>overwrite</b> the contents inside?`,
+        confirmText: 'Continue',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: confirmCallback
+      })
+    },
     install: function () {
-      this.$router.push(this.repair ? '/install/repair' : '/install/regular')
+      this.repair && this.$router.push('/install/repair')
+      var my = this
+      this.$http.post('/api/verify-path', `path=${this.$root.$data.install_location}`).then(function (resp) {
+        var data = resp.data || {}
+        if (!data.exists) {
+          my.$router.push('/install/regular')
+        } else {
+          my.show_overwrite_dialog(function () {
+            my.$router.push('/install/repair')
+          })
+        }
+      })
     },
     go_back: function () {
       this.$router.go(-1)

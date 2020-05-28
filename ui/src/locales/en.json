@@ -48,7 +48,9 @@
       "modify":"Modify",
       "repair": "Repair",
       "uninstall":"Uninstall",
-      "prompt":"Are you sure you want to uninstall {name}?"
+      "view_local_files": "View local files",
+      "prompt":"Are you sure you want to uninstall {name}?",
+      "prompt_confirm":"Uninstall {name}"
     },
     "back":"Back",
     "exit":"Exit",

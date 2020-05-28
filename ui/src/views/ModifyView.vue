@@ -20,22 +20,15 @@
             <br />
             <br />
 
-            <b-button class="is-dark is-medium" v-on:click="prepare_uninstall">
+            <a class="button is-dark is-medium" v-on:click="prepare_uninstall">
                 {{ $t('modify.uninstall') }}
-            </b-button>
+            </a>
+            <br />
+            <br />
 
-            <div class="modal is-active" v-if="show_uninstall">
-                <div class="modal-background"></div>
-                <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">{{ $t('modify.prompt', {'name': $root.$data.attrs.name}) }}</p>
-                    </header>
-                    <footer class="modal-card-foot">
-                        <button class="button is-danger" v-on:click="uninstall">{{ $t('yes') }}</button>
-                        <button class="button" v-on:click="cancel_uninstall">{{ $t('no') }}</button>
-                    </footer>
-                </div>
-            </div>
+            <a class="button is-dark is-medium" v-on:click="view_files">
+                {{ $t('modify.view_local_files') }}
+            </a>
     </div>
 </template>
 
@@ -43,9 +36,7 @@
 export default {
   name: 'ModifyView',
   data: function () {
-    return {
-      show_uninstall: false
-    }
+    return {}
   },
   methods: {
     update: function () {
@@ -58,10 +49,14 @@ export default {
       this.$router.push({ name: 'packages', params: { repair: true } })
     },
     prepare_uninstall: function () {
-      this.show_uninstall = true
-    },
-    cancel_uninstall: function () {
-      this.show_uninstall = false
+      this.$buefy.dialog.confirm({
+        title: this.$t('modify.uninstall'),
+        message: this.$t('modify.prompt', {'name': this.$root.$data.attrs.name}),
+        confirmText: this.$t('modify.prompt_confirm', {'name': this.$root.$data.attrs.name}),
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: this.uninstall
+      })
     },
     uninstall: function () {
       this.$router.push('/install/uninstall')

@@ -31,6 +31,7 @@ mod packages;
 mod static_files;
 mod uninstall;
 mod update_updater;
+mod verify_path;
 
 /// Expected incoming Request format from Hyper.
 pub type Request = hyper::server::Request;
@@ -140,6 +141,7 @@ impl Service for WebService {
             (Method::Post, "/api/start-install") => install::handle(self, req),
             (Method::Post, "/api/uninstall") => uninstall::handle(self, req),
             (Method::Post, "/api/update-updater") => update_updater::handle(self, req),
+            (Method::Post, "/api/verify-path") => verify_path::handle(self, req),
             (Method::Get, _) => static_files::handle(self, req),
             e => {
                 info!("Returned 404 for {:?}", e);

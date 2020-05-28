@@ -25,7 +25,13 @@ impl Task for RemoveTargetDirTask {
         if let Some(path) = context.install_path.as_ref() {
             let entries = std::fs::read_dir(path)
                 .map_err(|e| format!("Error reading {}: {}", path.to_string_lossy(), e))?;
-            // remove everything except the maintenancetool
+            // remove everything under the path
+            if !context.preexisting_install {
+                std::fs::remove_dir_all(path)
+                    .map_err(|e| format!("Error removing {}: {}", path.to_string_lossy(), e))?;
+                return Ok(TaskParamType::None);
+            }
+            // remove everything except the maintenancetool if repairing
             for entry in entries {
                 let path = entry
                     .map_err(|e| format!("Error reading file: {}", e))?
