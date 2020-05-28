@@ -9,6 +9,7 @@
     "postinstall": "node merge-strings.js"
   },
   "dependencies": {
+    "@mdi/font": "^5.3.45",
     "axios": "^0.19.2",
     "buefy": "^0.8.20",
     "vue": "^2.6.11",

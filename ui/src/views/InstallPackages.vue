@@ -54,7 +54,7 @@ export default {
       results.path = app.install_location
 
       if (this.is_repair) {
-        results['mode'] = 'force'
+        results.mode = 'force'
       }
 
       var targetUrl = '/api/start-install'

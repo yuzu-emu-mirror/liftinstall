@@ -113,12 +113,6 @@ app.get('/api/exit', (req, res) => {
   res.status(204).send()
 })
 
-app.get('/api/mock_error', (req, res) => {
-  console.log('-- Toggle error emulation')
-  showError = !showError
-  res.status(200).send(`Error emulation: ${showError}\n`)
-})
-
 app.post('/api/verify-path', (req, res) => {
   console.log('-- Verify Path')
   res.send({

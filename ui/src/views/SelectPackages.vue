@@ -83,10 +83,10 @@ export default {
     },
     show_overwrite_dialog: function (confirmCallback) {
       this.$buefy.dialog.confirm({
-        title: 'Overwriting',
-        message: `Directory ${this.$root.$data.install_location} already exists.<br>
-        Are you sure you want to <b>overwrite</b> the contents inside?`,
-        confirmText: 'Continue',
+        title: this.$t('select_packages.overwriting'),
+        message: this.$t('select_packages.overwriting_warning', { path: this.$root.$data.install_location }),
+        confirmText: this.$t('continue'),
+        cancelText: this.$t('cancel'),
         type: 'is-danger',
         hasIcon: true,
         onConfirm: confirmCallback

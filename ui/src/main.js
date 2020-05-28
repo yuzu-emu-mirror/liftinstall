@@ -8,6 +8,7 @@ import { stream_ajax as streamAjax } from './helpers'
 import Buefy from 'buefy'
 import messages from './locales/messages.json'
 import 'buefy/dist/buefy.css'
+import '@mdi/font/css/materialdesignicons.min.css'
 
 Vue.config.productionTip = false
 Vue.use(Buefy)

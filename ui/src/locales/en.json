@@ -21,7 +21,9 @@
       "repair": "Repair",
       "location":"Install Location",
       "location_placeholder":"Enter a install path here",
-      "select":"Select"
+      "select":"Select",
+      "overwriting": "Overwriting",
+      "overwriting_warning": "Directory {path} already exists.<br>Are you sure you want to <b>overwrite</b> the contents inside?"
     },
     "install_packages":{
       "check_for_update":"Checking for updates...",
@@ -55,6 +57,8 @@
     "back":"Back",
     "exit":"Exit",
     "yes":"Yes",
-    "no":"No"
+    "no":"No",
+    "continue": "Continue",
+    "cancel":"Cancel"
   }
 }

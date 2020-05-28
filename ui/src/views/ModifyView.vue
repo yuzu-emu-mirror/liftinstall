@@ -2,33 +2,33 @@
     <div class="column has-padding">
             <h4 class="subtitle">{{ $t('modify.title') }}</h4>
 
-            <b-button class="is-dark is-medium" v-on:click="update">
+            <b-button icon-left="update" type="is-dark-green" size="is-medium" @click="update">
                 {{ $t('modify.update') }}
             </b-button>
             <br />
             <br />
 
-            <b-button class="is-dark is-medium" v-on:click="modify_packages">
+            <b-button icon-left="pencil" type="is-info" size="is-medium" @click="modify_packages">
                 {{ $t('modify.modify') }}
             </b-button>
             <br />
             <br />
 
-            <a class="button is-dark is-medium" v-on:click="repair_packages">
+            <b-button icon-left="wrench" type="is-info" size="is-medium" @click="repair_packages">
                 {{ $t('modify.repair') }}
-            </a>
+            </b-button>
             <br />
             <br />
 
-            <a class="button is-dark is-medium" v-on:click="prepare_uninstall">
+            <b-button icon-left="delete" type="is-danger" size="is-medium" @click="prepare_uninstall">
                 {{ $t('modify.uninstall') }}
-            </a>
+            </b-button>
             <br />
             <br />
 
-            <a class="button is-dark is-medium" v-on:click="view_files">
+            <b-button icon-left="file-find" type="is-link" size="is-medium" @click="view_files">
                 {{ $t('modify.view_local_files') }}
-            </a>
+            </b-button>
     </div>
 </template>
 
@@ -51,8 +51,9 @@ export default {
     prepare_uninstall: function () {
       this.$buefy.dialog.confirm({
         title: this.$t('modify.uninstall'),
-        message: this.$t('modify.prompt', {'name': this.$root.$data.attrs.name}),
-        confirmText: this.$t('modify.prompt_confirm', {'name': this.$root.$data.attrs.name}),
+        message: this.$t('modify.prompt', { name: this.$root.$data.attrs.name }),
+        cancelText: this.$t('cancel'),
+        confirmText: this.$t('modify.prompt_confirm', { name: this.$root.$data.attrs.name }),
         type: 'is-danger',
         hasIcon: true,
         onConfirm: this.uninstall
@@ -65,3 +66,19 @@ export default {
   }
 }
 </script>
+
+<style>
+span {
+  cursor: unset !important;
+}
+.button.is-dark-green {
+  background-color: #00B245;
+  border-color: transparent;
+  color: #fff;
+}
+.button.is-dark-green:hover {
+  background-color: #00a53f;
+  border-color: transparent;
+  color: #fff;
+}
+</style>
