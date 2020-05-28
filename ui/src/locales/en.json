@@ -13,10 +13,12 @@
     },
     "select_packages":{
       "title":"Select which packages you want to install:",
+      "title_repair":"Select which packages you want to repair:",
       "installed":"(installed)",
       "advanced":"Advanced...",
       "install":"Install",
       "modify":"Modify",
+      "repair": "Repair",
       "location":"Install Location",
       "location_placeholder":"Enter a install path here",
       "select":"Select"
@@ -44,6 +46,7 @@
       "title":"Choose an option:",
       "update":"Update",
       "modify":"Modify",
+      "repair": "Repair",
       "uninstall":"Uninstall",
       "prompt":"Are you sure you want to uninstall {name}?"
     },

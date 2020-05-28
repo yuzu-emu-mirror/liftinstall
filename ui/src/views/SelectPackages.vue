@@ -1,6 +1,7 @@
 <template>
     <div class="column has-padding">
-            <h4 class="subtitle">{{ $t('select_packages.title') }}</h4>
+            <h4 class="subtitle" v-if="!repair">{{ $t('select_packages.title') }}</h4>
+            <h4 class="subtitle" v-if="repair">{{ $t('select_packages.title_repair') }}</h4>
 
             <!-- Build options -->
             <div class="tile is-ancestor">
@@ -45,8 +46,8 @@
                            v-on:click="install">{{ $t('select_packages.install') }}</b-button>
                     </p>
                     <p class="control">
-                        <b-button class="is-dark is-medium" v-if="$root.$data.metadata.preexisting_install"
-                           v-on:click="install">{{ $t('select_packages.modify') }}</b-button>
+                        <a class="button is-dark is-medium" v-if="$root.$data.metadata.preexisting_install"
+                           v-on:click="install">{{ repair ? $t('select_packages.repair') : $t('select_packages.modify') }}</a>
                     </p>
                 </div>
             </div>
@@ -65,8 +66,12 @@ export default {
   name: 'SelectPackages',
   data: function () {
     return {
-      advanced: false
+      advanced: false,
+      repair: false
     }
+  },
+  mounted: function () {
+    this.repair = this.$route.params.repair
   },
   methods: {
     select_file: function () {
@@ -77,7 +82,7 @@ export default {
       }))
     },
     install: function () {
-      this.$router.push('/install/regular')
+      this.$router.push(this.repair ? '/install/repair' : '/install/regular')
     },
     go_back: function () {
       this.$router.go(-1)

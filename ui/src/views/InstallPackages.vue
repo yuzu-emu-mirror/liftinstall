@@ -24,6 +24,7 @@ export default {
       is_uninstall: false,
       is_updater_update: false,
       is_update: false,
+      is_repair: false,
       failed_with_error: false,
       packages_installed: 0
     }
@@ -32,6 +33,7 @@ export default {
     this.is_uninstall = this.$route.params.kind === 'uninstall'
     this.is_updater_update = this.$route.params.kind === 'updater'
     this.is_update = this.$route.params.kind === 'update'
+    this.is_repair = this.$route.params.kind === 'repair'
     console.log('Installer kind: ' + this.$route.params.kind)
     this.install()
   },
@@ -50,6 +52,10 @@ export default {
       }
 
       results.path = app.install_location
+
+      if (this.is_repair) {
+        results['mode'] = 'force'
+      }
 
       var targetUrl = '/api/start-install'
       if (this.is_uninstall) {

@@ -14,6 +14,12 @@
             <br />
             <br />
 
+            <a class="button is-dark is-medium" v-on:click="repair_packages">
+                {{ $t('modify.repair') }}
+            </a>
+            <br />
+            <br />
+
             <b-button class="is-dark is-medium" v-on:click="prepare_uninstall">
                 {{ $t('modify.uninstall') }}
             </b-button>
@@ -48,6 +54,9 @@ export default {
     modify_packages: function () {
       this.$router.push('/packages')
     },
+    repair_packages: function () {
+      this.$router.push({ name: 'packages', params: { repair: true } })
+    },
     prepare_uninstall: function () {
       this.show_uninstall = true
     },
@@ -56,7 +65,8 @@ export default {
     },
     uninstall: function () {
       this.$router.push('/install/uninstall')
-    }
+    },
+    view_files: function () {}
   }
 }
 </script>
