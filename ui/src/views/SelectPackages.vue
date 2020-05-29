@@ -93,7 +93,16 @@ export default {
       })
     },
     install: function () {
-      this.repair && this.$router.push('/install/repair')
+      // maintenance + repair
+      if (this.repair) {
+        this.$router.push('/install/repair')
+        return
+      }
+      // maintenance + modify
+      if (this.$root.$data.metadata.preexisting_install) {
+        this.$router.push('/install/regular')
+        return
+      }
       var my = this
       this.$http.post('/api/verify-path', `path=${this.$root.$data.install_location}`).then(function (resp) {
         var data = resp.data || {}
