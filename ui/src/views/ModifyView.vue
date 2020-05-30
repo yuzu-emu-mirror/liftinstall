@@ -62,7 +62,9 @@ export default {
     uninstall: function () {
       this.$router.push('/install/uninstall')
     },
-    view_files: function () {}
+    view_files: function () {
+      this.$http.get('/api/view-local-folder')
+    }
   }
 }
 </script>

@@ -103,6 +103,10 @@ mod natives {
         }
     }
 
+    pub fn open_in_shell(path: &Path) {
+        // TODO
+    }
+
     /// Cleans up the installer
     pub fn burn_on_exit(app_name: &str) {
         let current_exe = env::current_exe().log_expect("Current executable could not be found");
@@ -266,6 +270,8 @@ mod natives {
     use slug::slugify;
     use std::fs::{create_dir_all, File};
     use std::io::Write;
+    use std::path::Path;
+    use std::process::Command;
 
     #[cfg(target_os = "linux")]
     pub fn create_shortcut(
@@ -323,6 +329,19 @@ mod natives {
     ) -> Result<String, String> {
         warn!("STUB! Creating shortcut is not implemented on macOS");
         Ok("".to_string())
+    }
+
+    pub fn open_in_shell(path: &Path) {
+        let shell: &str;
+        if cfg!(target_os = "linux") {
+            shell = "xdg-open";
+        } else if cfg!(target_os = "macos") {
+            shell = "open";
+        } else {
+            warn!("Unsupported platform");
+            return;
+        }
+        Command::new(shell).arg(path).spawn().ok();
     }
 
     /// Cleans up the installer
