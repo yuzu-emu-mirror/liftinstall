@@ -18,6 +18,9 @@ mod natives {
     use crate::logging::LoggingErrors;
 
     use std::env;
+    use std::os::windows::ffi::OsStrExt;
+    use std::path::Path;
+    use std::process::Command;
 
     use winapi::shared::minwindef::{DWORD, FALSE, MAX_PATH};
 
@@ -26,9 +29,11 @@ mod natives {
     use winapi::um::psapi::{
         EnumProcessModulesEx, GetModuleFileNameExW, K32EnumProcesses, LIST_MODULES_ALL,
     };
+    use winapi::um::shellapi::ShellExecuteW;
     use winapi::um::winnt::{
         HANDLE, PROCESS_QUERY_INFORMATION, PROCESS_TERMINATE, PROCESS_VM_READ,
     };
+    use winapi::um::winuser::SW_SHOWDEFAULT;
 
     use widestring::U16CString;
 
@@ -103,8 +108,23 @@ mod natives {
         }
     }
 
+    // Needed to call unsafe function `ShellExecuteW` from `winapi` crate
+    #[allow(unsafe_code)]
     pub fn open_in_shell(path: &Path) {
-        // TODO
+        let native_verb = U16CString::from_str("open").unwrap();
+        // https://doc.rust-lang.org/std/os/windows/ffi/trait.OsStrExt.html#tymethod.encode_wide
+        let mut native_path: Vec<u16> = path.as_os_str().encode_wide().collect();
+        native_path.push(0); // NULL terminator
+        unsafe {
+            ShellExecuteW(
+                std::ptr::null_mut(),
+                native_verb.as_ptr(),
+                native_path.as_ptr(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                SW_SHOWDEFAULT,
+            );
+        }
     }
 
     /// Cleans up the installer
