@@ -9,28 +9,28 @@
     "postinstall": "node merge-strings.js"
   },
   "dependencies": {
-    "@mdi/font": "^5.3.45",
-    "axios": "^0.19.2",
-    "buefy": "^0.8.20",
-    "vue": "^2.6.11",
-    "vue-axios": "^2.1.5",
-    "vue-i18n": "^8.18.1",
-    "vue-router": "^3.3.1"
+    "@mdi/font": "^5.9.55",
+    "axios": "^0.21.1",
+    "buefy": "^0.9.4",
+    "vue": "^2.6.12",
+    "vue-axios": "^3.2.4",
+    "vue-i18n": "^8.24.1",
+    "vue-router": "^3.5.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.4.1",
-    "@vue/cli-plugin-eslint": "^4.4.1",
-    "@vue/cli-service": "^4.4.1",
-    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/cli-plugin-babel": "^4.5.12",
+    "@vue/cli-plugin-eslint": "^4.5.12",
+    "@vue/cli-service": "^4.5.12",
+    "@vue/eslint-config-standard": "^6.0.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.2.2",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint": "^7.22.0",
+    "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-standard": "^4.1.0",
+    "eslint-plugin-vue": "^7.7.0",
     "express": "^4.17.1",
-    "http-proxy-middleware": "^1.0.4",
-    "vue-template-compiler": "^2.6.11"
+    "http-proxy-middleware": "^1.0.6",
+    "vue-template-compiler": "^2.6.12"
   }
 }

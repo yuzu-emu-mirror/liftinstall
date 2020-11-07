@@ -78,7 +78,7 @@ span {
   border-color: transparent;
   color: #fff;
 }
-.button.is-dark-green:hover {
+.button.is-dark-green:hover, .button.is-dark-green.is-hovered, .button.is-dark-green:focus {
   background-color: #00a53f;
   border-color: transparent;
   color: #fff;
