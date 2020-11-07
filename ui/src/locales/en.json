@@ -23,7 +23,9 @@
       "location_placeholder":"Enter a install path here",
       "select":"Select",
       "overwriting": "Overwriting",
-      "overwriting_warning": "Directory {path} already exists.<br>Are you sure you want to <b>overwrite</b> the contents inside?"
+      "overwriting_warning": "Directory {path} already exists.<br>Are you sure you want to <b>overwrite</b> the contents inside?",
+      "nothing_picked": "Nothing selected",
+      "nothing_picked_warning": "Please select at least one package to install!"
     },
     "install_packages":{
       "check_for_update":"Checking for updates...",

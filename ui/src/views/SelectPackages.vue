@@ -92,7 +92,20 @@ export default {
         onConfirm: confirmCallback
       })
     },
+    show_nothing_picked_dialog: function () {
+      this.$buefy.dialog.alert({
+        title: this.$t('select_packages.nothing_picked'),
+        message: this.$t('select_packages.nothing_picked_warning', { path: this.$root.$data.install_location }),
+        confirmText: this.$t('cancel'),
+        type: 'is-danger',
+        hasIcon: true
+      })
+    },
     install: function () {
+      if (!this.$root.config.packages.some(function (x) { return x.default })) {
+        this.show_nothing_picked_dialog()
+        return
+      }
       // maintenance + repair
       if (this.repair) {
         this.$router.push('/install/repair')
