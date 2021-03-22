@@ -24,7 +24,7 @@ export const i18n = new VueI18n({
 // Borrowed from http://tobyho.com/2012/07/27/taking-over-console-log/
 function intercept (method) {
   console[method] = function () {
-    var message = Array.prototype.slice.apply(arguments).join(' ')
+    const message = Array.prototype.slice.apply(arguments).join(' ')
     window.external.invoke(
       JSON.stringify({
         Log: {
@@ -37,7 +37,7 @@ function intercept (method) {
 }
 
 // See if we have access to the JSON interface
-var hasExternalInterface = false
+let hasExternalInterface = false
 try {
   window.external.invoke(JSON.stringify({
     Test: {}
@@ -60,8 +60,8 @@ if (hasExternalInterface) {
     )
   }
 
-  var methods = ['log', 'warn', 'error']
-  for (var i = 0; i < methods.length; i++) {
+  const methods = ['log', 'warn', 'error']
+  for (let i = 0; i < methods.length; i++) {
     intercept(methods[i])
   }
 }
@@ -97,7 +97,7 @@ function selectFileCallback (name) {
 
 window.selectFileCallback = selectFileCallback
 
-var app = new Vue({
+const app = new Vue({
   i18n: i18n,
   router: router,
   data: {
@@ -125,7 +125,8 @@ var app = new Vue({
   methods: {
     exit: function () {
       axios.get('/api/exit').catch(function (msg) {
-        var searchLocation = (app.metadata.install_path && app.metadata.install_path.length > 0) ? app.metadata.install_path
+        const searchLocation = (app.metadata.install_path && app.metadata.install_path.length > 0)
+          ? app.metadata.install_path
           : i18n.t('error.location_unknown')
 
         app.$router.replace({

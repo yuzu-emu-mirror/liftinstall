@@ -39,13 +39,13 @@ export default {
   },
   methods: {
     install: function () {
-      var that = this
-      var app = this.$root
+      const that = this
+      const app = this.$root
 
-      var results = {}
+      const results = {}
 
-      for (var package_index = 0; package_index < app.config.packages.length; package_index++) {
-        var current_package = app.config.packages[package_index]
+      for (let package_index = 0; package_index < app.config.packages.length; package_index++) {
+        const current_package = app.config.packages[package_index]
         if (current_package.default != null) {
           results[current_package.name] = current_package.default
         }
@@ -57,7 +57,7 @@ export default {
         results.mode = 'force'
       }
 
-      var targetUrl = '/api/start-install'
+      let targetUrl = '/api/start-install'
       if (this.is_uninstall) {
         targetUrl = '/api/uninstall'
       }

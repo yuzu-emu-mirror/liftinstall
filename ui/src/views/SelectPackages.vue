@@ -116,9 +116,9 @@ export default {
         this.$router.push('/install/regular')
         return
       }
-      var my = this
+      const my = this
       this.$http.post('/api/verify-path', `path=${this.$root.$data.install_location}`).then(function (resp) {
-        var data = resp.data || {}
+        const data = resp.data || {}
         if (!data.exists) {
           my.$router.push('/install/regular')
         } else {
