@@ -37,12 +37,11 @@ pub fn start_ui(app_name: &str, http_address: &str, is_launcher: bool) {
 
             match command {
                 CallbackType::SelectInstallDir { callback_name } => {
-                    let result = wv
-                        .dialog()
-                        .choose_directory("Select a install directory...", "");
+                    let result =
+                        tinyfiledialogs::select_folder_dialog("Select a install directory...", "");
 
-                    if let Ok(Some(new_path)) = result {
-                        if new_path.to_string_lossy().len() > 0 {
+                    if let Some(new_path) = result {
+                        if !new_path.is_empty() {
                             let result = serde_json::to_string(&new_path)
                                 .log_expect("Unable to serialize response");
                             let command = format!("window.{}({});", callback_name, result);
