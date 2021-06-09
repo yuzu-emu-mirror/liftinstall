@@ -26,7 +26,7 @@ pub fn start_ui(app_name: &str, http_address: &str, is_launcher: bool) {
         .content(Content::Url(http_address))
         .size(size.0, size.1)
         .resizable(false)
-        .debug(false)
+        .debug(cfg!(debug_assertions))
         .user_data(())
         .invoke_handler(|wv, msg| {
             let mut cb_result = Ok(());
