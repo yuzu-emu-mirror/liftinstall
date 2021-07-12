@@ -11,6 +11,7 @@ use config::PackageDescription;
 
 use logging::LoggingErrors;
 
+#[cfg(windows)]
 use native::create_desktop_shortcut;
 
 pub struct InstallDesktopShortcutTask {
@@ -70,6 +71,7 @@ impl Task for InstallDesktopShortcutTask {
             "maintenancetool"
         };
 
+        #[cfg(windows)]
         for shortcut in package.shortcuts {
             let tool_path = path.join(platform_extension);
             let tool_path = tool_path

@@ -314,6 +314,7 @@ mod natives {
         target: &str,
         args: &str,
         working_dir: &str,
+        exe_path: &str,
     ) -> Result<String, String> {
         // FIXME: no icon will be shown since no icon is provided
         let data_local_dir = dirs::data_local_dir();
