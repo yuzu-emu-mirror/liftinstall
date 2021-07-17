@@ -12,7 +12,7 @@
             <span v-if="Lpackage.installed"><i>(installed)</i></span>
           </label>
           <div>
-            <img class="package-icon" :src="`${publicPath + Lpackage.icon}`" v-if="$root.$data.metadata.is_windows"/>
+            <img class="package-icon" :src="`${publicPath + Lpackage.icon}`"/>
             <p style="padding-top: 4px;" class="package-description">
               {{ Lpackage.description }}
             </p>
