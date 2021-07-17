@@ -65,7 +65,7 @@
       </p>
     </div>
 
-    <div class="is-right-floating is-bottom-floating">
+    <div class="is-right-floating is-bottom-floating" v-scroll>
       <p class="control">
         <a class="button is-dark is-medium" v-on:click="verify_token">Verify Token</a>
       </p>
@@ -166,6 +166,13 @@ export default {
     error: function() {
       this.verification_opened = true;
     }
+  },
+  directives: {
+      scroll: {
+          inserted: function (el) {
+              el.scrollIntoView()
+          }
+      }
   }
 }
 </script>

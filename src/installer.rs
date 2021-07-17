@@ -97,6 +97,7 @@ pub struct InstallerFramework {
     // If we just completed an uninstall, and we should clean up after ourselves.
     pub burn_after_exit: bool,
     pub launcher_path: Option<String>,
+    pub is_windows: bool,
 }
 
 /// Contains basic properties on the status of the session. Subset of InstallationFramework.
@@ -453,6 +454,10 @@ impl InstallerFramework {
             is_launcher: false,
             burn_after_exit: false,
             launcher_path: None,
+            #[cfg(windows)]
+            is_windows: true,
+            #[cfg(not(windows))]
+            is_windows: false,
         }
     }
 
@@ -480,6 +485,10 @@ impl InstallerFramework {
             is_launcher: false,
             burn_after_exit: false,
             launcher_path: None,
+            #[cfg(windows)]
+            is_windows: true,
+            #[cfg(not(windows))]
+            is_windows: false,
         })
     }
 }
