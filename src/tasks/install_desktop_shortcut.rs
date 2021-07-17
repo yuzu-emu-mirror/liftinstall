@@ -13,6 +13,8 @@ use logging::LoggingErrors;
 
 #[cfg(windows)]
 use native::create_desktop_shortcut;
+#[cfg(target_os = "linux")]
+use native::create_shortcut;
 
 pub struct InstallDesktopShortcutTask {
     pub name: String,
@@ -71,7 +73,6 @@ impl Task for InstallDesktopShortcutTask {
             "maintenancetool"
         };
 
-        #[cfg(windows)]
         for shortcut in package.shortcuts {
             let tool_path = path.join(platform_extension);
             let tool_path = tool_path
@@ -83,7 +84,19 @@ impl Task for InstallDesktopShortcutTask {
                 .to_str()
                 .log_expect("Unable to build shortcut metadata (exe)");
 
+            #[cfg(windows)]
             installed_files.push(create_desktop_shortcut(
+                &shortcut.name,
+                &shortcut.description,
+                tool_path,
+                // TODO: Send by list
+                &format!("--launcher \"{}\"", exe_path),
+                &starting_dir,
+                exe_path,
+            )?);
+
+            #[cfg(target_os = "linux")]
+            installed_files.push(create_shortcut(
                 &shortcut.name,
                 &shortcut.description,
                 tool_path,
