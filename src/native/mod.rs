@@ -331,7 +331,7 @@ mod natives {
                         ));
                     }
                 };
-                path.push(format!("{}.desktop", slugify(name))); // file name
+                path.push(format!("yuzu-maintenance-tool_{}.desktop", slugify(name))); // file name
                 let desktop_file = format!(
                 "[Desktop Entry]\nType=Application\nName={}\nExec=\"{}\" {}\nComment={}\nPath={}\nIcon=yuzu\n",
                 name, target, args, description, working_dir
