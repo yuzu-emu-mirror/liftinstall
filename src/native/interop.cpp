@@ -46,7 +46,7 @@ extern "C" int saveShortcut(
     const wchar_t *workingDir,
     const wchar_t *exePath)
 {
-    const char *errStr = NULL;
+    char *errStr = NULL;
     HRESULT h;
     IShellLink *shellLink = NULL;
     IPersistFile *persistFile = NULL;
@@ -161,18 +161,6 @@ extern "C" HRESULT getSystemFolder(wchar_t *out_path)
 {
     PWSTR path = NULL;
     HRESULT result = SHGetKnownFolderPath(FOLDERID_System, 0, NULL, &path);
-    if (result == S_OK)
-    {
-        wcscpy_s(out_path, MAX_PATH + 1, path);
-        CoTaskMemFree(path);
-    }
-    return result;
-}
-
-extern "C" HRESULT getDesktopFolder(wchar_t *out_path)
-{
-    PWSTR path = NULL;
-    HRESULT result = SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &path);
     if (result == S_OK)
     {
         wcscpy_s(out_path, MAX_PATH + 1, path);

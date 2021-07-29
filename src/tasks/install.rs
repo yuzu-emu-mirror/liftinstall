@@ -1,26 +1,29 @@
 //! Overall hierarchy for installing a installation of the application.
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use tasks::ensure_only_instance::EnsureOnlyInstanceTask;
-use tasks::install_dir::VerifyInstallDirTask;
-use tasks::install_global_shortcut::InstallGlobalShortcutsTask;
-use tasks::install_pkg::InstallPackageTask;
-use tasks::save_executable::SaveExecutableTask;
-use tasks::uninstall_pkg::UninstallPackageTask;
-use tasks::launch_installed_on_exit::LaunchOnExitTask;
+use crate::tasks::ensure_only_instance::EnsureOnlyInstanceTask;
+use crate::tasks::install_dir::VerifyInstallDirTask;
+use crate::tasks::install_global_shortcut::InstallGlobalShortcutsTask;
+use crate::tasks::install_pkg::InstallPackageTask;
+use crate::tasks::remove_target_dir::RemoveTargetDirTask;
+use crate::tasks::save_executable::SaveExecutableTask;
+use crate::tasks::uninstall_pkg::UninstallPackageTask;
+use crate::tasks::launch_installed_on_exit::LaunchOnExitTask;
 
-use tasks::Task;
-use tasks::TaskDependency;
-use tasks::TaskMessage;
-use tasks::TaskOrdering;
-use tasks::TaskParamType;
+use crate::tasks::Task;
+use crate::tasks::TaskDependency;
+use crate::tasks::TaskMessage;
+use crate::tasks::TaskOrdering;
+use crate::tasks::TaskParamType;
 
 pub struct InstallTask {
     pub items: Vec<String>,
     pub uninstall_items: Vec<String>,
     pub fresh_install: bool,
     pub create_desktop_shortcuts: bool,
+    // force_install: remove the target directory before installing
+    pub force_install: bool,
 }
 
 impl Task for InstallTask {
@@ -41,6 +44,13 @@ impl Task for InstallTask {
             TaskOrdering::Pre,
             Box::new(EnsureOnlyInstanceTask {}),
         ));
+
+        if self.force_install {
+            elements.push(TaskDependency::build(
+                TaskOrdering::Pre,
+                Box::new(RemoveTargetDirTask {}),
+            ));
+        }
 
         elements.push(TaskDependency::build(
             TaskOrdering::Pre,

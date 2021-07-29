@@ -2,14 +2,14 @@
 //!
 //! The /api/install call installs a set of packages dictated by a POST request.
 
-use frontend::rest::services::stream_progress;
-use frontend::rest::services::Future;
-use frontend::rest::services::Request;
-use frontend::rest::services::WebService;
+use crate::frontend::rest::services::stream_progress;
+use crate::frontend::rest::services::Future;
+use crate::frontend::rest::services::Request;
+use crate::frontend::rest::services::WebService;
 
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
-use installer::InstallMessage;
+use crate::installer::InstallMessage;
 
 use futures::future::Future as _;
 use futures::stream::Stream;
@@ -23,11 +23,12 @@ pub fn handle(service: &WebService, req: Request) -> Future {
 
     Box::new(req.body().concat2().map(move |b| {
         let results = form_urlencoded::parse(b.as_ref())
-            .into_owned()
-            .collect::<HashMap<String, String>>();
-
+        .into_owned()
+        .collect::<HashMap<String, String>>();
+        
         let mut to_install = Vec::new();
         let mut path: Option<String> = None;
+        let mut force_install = false;
         let mut install_desktop_shortcut= false;
 
         // Transform results into just an array of stuff to install
@@ -38,6 +39,10 @@ pub fn handle(service: &WebService, req: Request) -> Future {
             } else if key == "installDesktopShortcut" {
                 info!("Found installDesktopShortcut {:?}", value);
                 install_desktop_shortcut = value == "true";
+            }
+
+            if key == "mode" && value == "force" {
+                force_install = true;
                 continue;
             }
 
@@ -60,7 +65,7 @@ pub fn handle(service: &WebService, req: Request) -> Future {
                 framework.set_install_dir(&path);
             }
 
-            if let Err(v) = framework.install(to_install, &sender, new_install, install_desktop_shortcut) {
+            if let Err(v) = framework.install(to_install, &sender, new_install, install_desktop_shortcut, force_install) {
                 error!("Install error occurred: {:?}", v);
                 if let Err(v) = sender.send(InstallMessage::Error(v)) {
                     error!("Failed to send install error: {:?}", v);

@@ -1,15 +1,21 @@
 //! Downloads a package into memory.
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use tasks::check_authorization::CheckAuthorizationTask;
-use tasks::{Task, TaskDependency, TaskMessage, TaskOrdering, TaskParamType};
+use crate::tasks::check_authorization::CheckAuthorizationTask;
+use crate::tasks::Task;
+use crate::tasks::TaskDependency;
+use crate::tasks::TaskMessage;
+use crate::tasks::TaskOrdering;
+use crate::tasks::TaskParamType;
 
-use http::stream_file;
+use crate::tasks::resolver::ResolvePackageTask;
 
-use number_prefix::{NumberPrefix, Prefixed, Standalone};
+use crate::http::stream_file;
 
-use logging::LoggingErrors;
+use number_prefix::NumberPrefix::{self, Prefixed, Standalone};
+
+use crate::logging::LoggingErrors;
 
 pub struct DownloadPackageTask {
     pub name: String,

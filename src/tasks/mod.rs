@@ -4,10 +4,10 @@
 use std::fmt;
 use std::fmt::Display;
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use sources::types::File;
-use sources::types::Version;
+use crate::sources::types::File;
+use crate::sources::types::Version;
 
 pub mod check_authorization;
 pub mod download_pkg;
@@ -26,6 +26,7 @@ pub mod uninstall;
 pub mod uninstall_global_shortcut;
 pub mod uninstall_pkg;
 pub mod uninstall_shortcuts;
+pub mod remove_target_dir;
 
 /// An abstraction over the various parameters that can be passed around.
 pub enum TaskParamType {

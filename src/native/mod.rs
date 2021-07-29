@@ -15,9 +15,12 @@ mod natives {
 
     const PROCESS_LEN: usize = 10192;
 
-    use logging::LoggingErrors;
+    use crate::logging::LoggingErrors;
 
     use std::env;
+    use std::os::windows::ffi::OsStrExt;
+    use std::path::Path;
+    use std::process::Command;
 
     use winapi::shared::minwindef::{DWORD, FALSE, MAX_PATH};
 
@@ -26,11 +29,13 @@ mod natives {
     use winapi::um::psapi::{
         EnumProcessModulesEx, GetModuleFileNameExW, K32EnumProcesses, LIST_MODULES_ALL,
     };
+    use winapi::um::shellapi::ShellExecuteW;
     use winapi::um::winnt::{
         HANDLE, PROCESS_QUERY_INFORMATION, PROCESS_TERMINATE, PROCESS_VM_READ,
     };
+    use winapi::um::winuser::SW_SHOWDEFAULT;
 
-    use widestring::{U16CString};
+    use widestring::U16CString;
 
     extern "C" {
         pub fn saveShortcut(
@@ -50,28 +55,6 @@ mod natives {
         ) -> ::std::os::raw::c_int;
 
         pub fn getSystemFolder(out_path: *mut ::std::os::raw::c_ushort) -> HRESULT;
-
-        pub fn getDesktopFolder(out_path: *mut ::std::os::raw::c_ushort) -> HRESULT;
-    }
-
-    // Needed here for Windows interop
-    #[allow(unsafe_code)]
-    pub fn create_desktop_shortcut(
-        name: &str,
-        description: &str,
-        target: &str,
-        args: &str,
-        working_dir: &str,
-        exe_path: &str,
-    ) -> Result<String, String> {
-        let mut cmd_path = [0u16; MAX_PATH + 1];
-        let _result = unsafe { getDesktopFolder(cmd_path.as_mut_ptr()) };
-        let source_path = format!(
-            "{}\\{}.lnk",
-            String::from_utf16_lossy(&cmd_path[..count_u16(&cmd_path)]).as_str(),
-            name
-        );
-        create_shortcut_inner(source_path, name, description, target, args, working_dir, exe_path)
     }
 
     // Needed here for Windows interop
@@ -139,15 +122,23 @@ mod natives {
         }
     }
 
-    fn count_u16(u16str: &[u16]) -> usize {
-        let mut pos = 0;
-        for x in u16str.iter() {
-            if *x == 0 {
-                break;
-            }
-            pos += 1;
+    // Needed to call unsafe function `ShellExecuteW` from `winapi` crate
+    #[allow(unsafe_code)]
+    pub fn open_in_shell(path: &Path) {
+        let native_verb = U16CString::from_str("open").unwrap();
+        // https://doc.rust-lang.org/std/os/windows/ffi/trait.OsStrExt.html#tymethod.encode_wide
+        let mut native_path: Vec<u16> = path.as_os_str().encode_wide().collect();
+        native_path.push(0); // NULL terminator
+        unsafe {
+            ShellExecuteW(
+                std::ptr::null_mut(),
+                native_verb.as_ptr(),
+                native_path.as_ptr(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                SW_SHOWDEFAULT,
+            );
         }
-        pos
     }
 
     /// Cleans up the installer
@@ -179,13 +170,20 @@ mod natives {
         let spawn_result: i32 = unsafe {
             let mut cmd_path = [0u16; MAX_PATH + 1];
             let result = getSystemFolder(cmd_path.as_mut_ptr());
+            let mut pos = 0;
+            for x in cmd_path.iter() {
+                if *x == 0 {
+                    break;
+                }
+                pos += 1;
+            }
             if result != winapi::shared::winerror::S_OK {
                 return;
             }
 
             spawnDetached(
                 U16CString::from_str(
-                    format!("{}\\cmd.exe", String::from_utf16_lossy(&cmd_path[..count_u16(&cmd_path)])).as_str(),
+                    format!("{}\\cmd.exe", String::from_utf16_lossy(&cmd_path[..pos])).as_str(),
                 )
                 .log_expect("Unable to convert string to wchar_t")
                 .as_ptr(),
@@ -297,7 +295,7 @@ mod natives {
 
     use std::env;
 
-    use logging::LoggingErrors;
+    use crate::logging::LoggingErrors;
 
     use sysinfo::{ProcessExt, SystemExt};
 
@@ -306,6 +304,8 @@ mod natives {
     use slug::slugify;
     use std::fs::{create_dir_all, File};
     use std::io::Write;
+    use std::path::Path;
+    use std::process::Command;
 
     #[cfg(target_os = "linux")]
     pub fn create_shortcut(
@@ -314,6 +314,7 @@ mod natives {
         target: &str,
         args: &str,
         working_dir: &str,
+        _exe_path: &str,
     ) -> Result<String, String> {
         // FIXME: no icon will be shown since no icon is provided
         let data_local_dir = dirs::data_local_dir();
@@ -322,7 +323,7 @@ mod natives {
                 let mut path = x;
                 path.push("applications");
                 match create_dir_all(path.to_path_buf()) {
-                    Ok(_) => (()),
+                    Ok(_) => (),
                     Err(e) => {
                         return Err(format!(
                             "Local data directory does not exist and cannot be created: {}",
@@ -340,7 +341,7 @@ mod natives {
                     Ok(file) => file,
                     Err(e) => return Err(format!("Unable to create desktop file: {}", e)),
                 };
-                let mut desktop_f = desktop_f.write_all(desktop_file.as_bytes());
+                let desktop_f = desktop_f.write_all(desktop_file.as_bytes());
                 match desktop_f {
                     Ok(_) => Ok("".to_string()),
                     Err(e) => Err(format!("Unable to write desktop file: {}", e)),
@@ -358,9 +359,23 @@ mod natives {
         target: &str,
         args: &str,
         working_dir: &str,
+        _exe_path: &str,
     ) -> Result<String, String> {
         warn!("STUB! Creating shortcut is not implemented on macOS");
         Ok("".to_string())
+    }
+
+    pub fn open_in_shell(path: &Path) {
+        let shell: &str;
+        if cfg!(target_os = "linux") {
+            shell = "xdg-open";
+        } else if cfg!(target_os = "macos") {
+            shell = "open";
+        } else {
+            warn!("Unsupported platform");
+            return;
+        }
+        Command::new(shell).arg(path).spawn().ok();
     }
 
     /// Cleans up the installer
@@ -387,7 +402,7 @@ mod natives {
         let mut processes: Vec<super::Process> = Vec::new();
         let mut system = sysinfo::System::new();
         system.refresh_all();
-        for (pid, procs) in system.get_process_list() {
+        for (pid, procs) in system.get_processes() {
             processes.push(super::Process {
                 pid: *pid as usize,
                 name: procs.name().to_string(),

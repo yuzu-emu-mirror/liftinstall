@@ -74,7 +74,7 @@ use config::BaseAttributes;
 use std::process::{Command, Stdio, exit};
 use std::fs;
 
-static RAW_CONFIG: &'static str = include_str!(concat!(env!("OUT_DIR"), "/bootstrap.toml"));
+const RAW_CONFIG: &str = include_str!(concat!(env!("OUT_DIR"), "/bootstrap.toml"));
 
 fn main() {
     let config = BaseAttributes::from_toml_str(RAW_CONFIG).expect("Config file could not be read");
@@ -109,6 +109,7 @@ fn main() {
 
     info!("{} installer", app_name);
 
+    // Handle self-updating if needed
     let current_exe = std::env::current_exe().log_expect("Current executable could not be found");
     let current_path = current_exe
         .parent()

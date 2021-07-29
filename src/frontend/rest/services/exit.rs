@@ -2,15 +2,18 @@
 //!
 //! The /api/exit closes down the application.
 
-use frontend::rest::services::Future as InternalFuture;
-use frontend::rest::services::{default_future, Request, Response, WebService};
+use crate::frontend::rest::services::default_future;
+use crate::frontend::rest::services::Future;
+use crate::frontend::rest::services::Request;
+use crate::frontend::rest::services::Response;
+use crate::frontend::rest::services::WebService;
 
 use hyper::header::ContentType;
 use hyper::StatusCode;
 
 use std::process::exit;
 
-pub fn handle(service: &WebService, _req: Request) -> InternalFuture {
+pub fn handle(service: &WebService, _req: Request) -> Future {
     match service.get_framework_write().shutdown() {
         Ok(_) => {
             exit(0);
