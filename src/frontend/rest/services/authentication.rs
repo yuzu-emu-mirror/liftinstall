@@ -8,6 +8,7 @@ use futures::{Future, Stream};
 
 use hyper::header::{ContentLength, ContentType};
 
+use jsonwebtoken::DecodingKey;
 use jwt::{decode, Algorithm, Validation};
 
 use reqwest::header::USER_AGENT;
@@ -48,7 +49,7 @@ pub struct JWTClaims {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct AuthRequest {
     username: String,
-    token: String
+    token: String,
 }
 
 /// Calls the given server to obtain a JWT token and returns a Future<String> with the response
@@ -127,17 +128,14 @@ pub fn validate_token(
 ) -> Result<JWTClaims, String> {
     // Get the public key for this authentication url
     let pub_key = if pub_key_base64.is_empty() {
-        vec![]
+        DecodingKey::from_secret(&[])
     } else {
-        match base64::decode(&pub_key_base64) {
-            Ok(v) => v,
-            Err(err) => {
-                return Err(format!(
-                    "Configured public key was not empty and did not decode as base64 {:?}",
-                    err
-                ));
-            }
-        }
+        DecodingKey::from_base64_secret(&pub_key_base64).map_err(|e| {
+            format!(
+                "Configured public key was not empty and did not decode as base64 {:?}",
+                e
+            )
+        })?
     };
 
     // Configure validation for audience and issuer if the configuration provides it
@@ -146,7 +144,7 @@ pub fn validate_token(
             let mut valid = Validation::new(Algorithm::RS256);
             valid.iss = v.iss;
             if let &Some(ref v) = &v.aud {
-                valid.set_audience(v);
+                valid.set_audience(&[v]);
             }
             valid
         }
@@ -155,7 +153,7 @@ pub fn validate_token(
     validation.validate_exp = false;
     validation.validate_nbf = false;
     // Verify the JWT token
-    decode::<JWTClaims>(&body, pub_key.as_slice(), &validation)
+    decode::<JWTClaims>(&body, &pub_key, &validation)
         .map(|tok| tok.claims)
         .map_err(|err| {
             format!(
@@ -189,7 +187,8 @@ pub fn handle(service: &WebService, _req: Request) -> InternalFuture {
         _req.body()
             .concat2()
             .map(move |body| {
-                let req: AuthRequest = serde_json::from_slice(&body).log_expect("Malformed request");
+                let req: AuthRequest =
+                    serde_json::from_slice(&body).log_expect("Malformed request");
 
                 // Determine which credentials we should use
                 let (username, token) = {

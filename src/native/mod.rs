@@ -402,7 +402,7 @@ mod natives {
         let mut processes: Vec<super::Process> = Vec::new();
         let mut system = sysinfo::System::new();
         system.refresh_all();
-        for (pid, procs) in system.get_processes() {
+        for (pid, procs) in system.processes() {
             processes.push(super::Process {
                 pid: *pid as usize,
                 name: procs.name().to_string(),
