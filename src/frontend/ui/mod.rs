@@ -15,16 +15,9 @@ use wry::{
 
 use log::Level;
 
-#[derive(Deserialize, Debug)]
-enum CallbackType {
-    SelectInstallDir { callback_name: String },
-    Log { msg: String, kind: String },
-    Test {},
-}
-
 /// Starts the main web UI. Will return when UI is closed.
 pub fn start_ui(app_name: &str, http_address: &str, is_launcher: bool) -> Result<()> {
-    let size = if is_launcher { (600, 300) } else { (1024, 600) };
+    let size = if is_launcher { (600.0, 300.0) } else { (1024.0, 600.0) };
     info!("Spawning web view instance");
 
     let event_loop = EventLoop::new();
