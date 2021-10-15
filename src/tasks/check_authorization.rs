@@ -1,13 +1,13 @@
 //! Validates that users have correct authorization to download packages.
 
-use frontend::rest::services::authentication;
+use crate::frontend::rest::services::authentication;
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
-use tasks::resolver::ResolvePackageTask;
-use tasks::{Task, TaskDependency, TaskMessage, TaskOrdering, TaskParamType};
+use crate::tasks::resolver::ResolvePackageTask;
+use crate::tasks::{Task, TaskDependency, TaskMessage, TaskOrdering, TaskParamType};
 
 pub struct CheckAuthorizationTask {
     pub name: String,

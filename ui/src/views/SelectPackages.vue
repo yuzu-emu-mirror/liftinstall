@@ -26,13 +26,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="tile is-child is-6 box clickable-box" v-if="!$root.$data.metadata.preexisting_install"  v-on:click.capture.stop="installDesktopShortcut = !installDesktopShortcut">
-                  <h4>Install Options</h4>
-                  <b-checkbox v-model="installDesktopShortcut">
-                    Create Desktop Shortcut
-                  </b-checkbox>
-                </div>
             </div>
+        </div>
+        <div class="tile is-child is-6 box clickable-box" v-if="!$root.$data.metadata.preexisting_install"  v-on:click.capture.stop="installDesktopShortcut = !installDesktopShortcut">
+          <h4>Install Options</h4>
+          <b-checkbox v-model="installDesktopShortcut">
+            Create Desktop Shortcut
+          </b-checkbox>
         </div>
 
         <div class="subtitle is-6" v-if="!$root.$data.metadata.preexisting_install && advanced">{{ $t('select_packages.location') }}</div>
@@ -79,6 +79,7 @@ export default {
   name: 'SelectPackages',
   data: function () {
     return {
+      publicPath: process.env.BASE_URL,
       advanced: false,
       repair: false,
       installDesktopShortcut: true
@@ -131,22 +132,22 @@ export default {
       }
       // maintenance + repair
       if (this.repair) {
-        this.$router.push('/install/repair')
+        this.$router.push('/install/repair/' + this.installDesktopShortcut.toString())
         return
       }
       // maintenance + modify
       if (this.$root.$data.metadata.preexisting_install) {
-        this.$router.push('/install/regular')
+        this.$router.push('/install/regular/' + this.installDesktopShortcut.toString())
         return
       }
       const my = this
       this.$http.post('/api/verify-path', `path=${this.$root.$data.install_location}`).then(function (resp) {
         const data = resp.data || {}
         if (!data.exists) {
-          my.$router.push('/install/regular')
+          my.$router.push('/install/regular/' + my.installDesktopShortcut.toString())
         } else {
           my.show_overwrite_dialog(function () {
-            my.$router.push('/install/repair')
+            my.$router.push('/install/repair/' + my.installDesktopShortcut.toString())
           })
         }
       })

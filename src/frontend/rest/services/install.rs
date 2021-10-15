@@ -39,6 +39,7 @@ pub fn handle(service: &WebService, req: Request) -> Future {
             } else if key == "installDesktopShortcut" {
                 info!("Found installDesktopShortcut {:?}", value);
                 install_desktop_shortcut = value == "true";
+                continue;
             }
 
             if key == "mode" && value == "force" {

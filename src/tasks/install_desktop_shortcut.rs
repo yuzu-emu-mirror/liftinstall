@@ -1,17 +1,17 @@
 //! Generates shortcuts for a specified file.
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use tasks::Task;
-use tasks::TaskDependency;
-use tasks::TaskMessage;
-use tasks::TaskParamType;
+use crate::tasks::Task;
+use crate::tasks::TaskDependency;
+use crate::tasks::TaskMessage;
+use crate::tasks::TaskParamType;
 
-use config::PackageDescription;
+use crate::config::PackageDescription;
 
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
-use native::create_desktop_shortcut;
+use crate::native::create_shortcut;
 
 pub struct InstallDesktopShortcutTask {
     pub name: String,
@@ -81,7 +81,7 @@ impl Task for InstallDesktopShortcutTask {
                 .to_str()
                 .log_expect("Unable to build shortcut metadata (exe)");
 
-            installed_files.push(create_desktop_shortcut(
+            installed_files.push(create_shortcut(
                 &shortcut.name,
                 &shortcut.description,
                 tool_path,

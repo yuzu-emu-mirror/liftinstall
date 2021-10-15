@@ -2,10 +2,10 @@
 //!
 //! Contains the yuzu-emu core API implementation of a release source.
 
-use http::build_client;
+use crate::http::build_client;
+use crate::sources::types::*;
 use reqwest::header::USER_AGENT;
 use reqwest::StatusCode;
-use sources::types::*;
 
 pub struct PatreonReleases {}
 

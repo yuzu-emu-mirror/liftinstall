@@ -333,7 +333,7 @@ mod natives {
                 };
                 path.push(format!("{}.desktop", slugify(name))); // file name
                 let desktop_file = format!(
-                    "[Desktop Entry]\nName={}\nExec=\"{}\" {}\nComment={}\nPath={}\n",
+                    "[Desktop Entry]\nName={}\nExec=\"{}\" {}\nComment={}\nType=Application\nPath={}\n",
                     name, target, args, description, working_dir
                 );
                 let desktop_f = File::create(path);

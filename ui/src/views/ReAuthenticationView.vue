@@ -26,20 +26,20 @@
 </template>
 
 <script>
-  export default {
-    name: "ReAuthenticationView",
-    methods: {
-      go_authenticate: function() {
-        this.$router.replace('/authentication')
-      },
-      launch_old_version: function () {
-        this.$root.exit()
-      },
-      go_packages: function () {
-        this.$router.push('/packages')
-      }
+export default {
+  name: 'ReAuthenticationView',
+  methods: {
+    go_authenticate: function () {
+      this.$router.replace('/authentication')
+    },
+    launch_old_version: function () {
+      this.$root.exit()
+    },
+    go_packages: function () {
+      this.$router.push('/packages')
     }
   }
+}
 </script>
 
 <style scoped>

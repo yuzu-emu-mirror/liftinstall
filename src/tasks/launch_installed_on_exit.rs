@@ -2,16 +2,16 @@
 //! If theres multiple launchable packages, then choose the first listed in config
 //! If there are multiple shortcuts for the first package, then launch the first.
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use tasks::Task;
-use tasks::TaskDependency;
-use tasks::TaskMessage;
-use tasks::TaskParamType;
+use crate::tasks::Task;
+use crate::tasks::TaskDependency;
+use crate::tasks::TaskMessage;
+use crate::tasks::TaskParamType;
 
-use config::PackageDescription;
+use crate::config::PackageDescription;
 
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
 pub struct LaunchOnExitTask {}
 

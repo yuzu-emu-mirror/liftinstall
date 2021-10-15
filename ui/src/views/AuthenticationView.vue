@@ -75,56 +75,55 @@
 
 <script>
 
-
 export default {
   name: 'AuthenticationView',
-  created: function() {
+  created: function () {
     // If they are already authenticated when this page is loaded,
     // then we can asssume they are "clicking here for more details" and should show the appropriate error message
     if (this.$root.is_authenticated) {
-      this.verification_opened = true;
+      this.verification_opened = true
     }
   },
-  data: function() {
+  data: function () {
     return {
       browser_opened: false,
       verification_opened: false,
-      invalid_token: false,
+      invalid_token: false
     }
   },
   computed: {
-    show_header: function() {
-      return !this.browser_opened && !this.verification_opened && !this.invalid_token;
+    show_header: function () {
+      return !this.browser_opened && !this.verification_opened && !this.invalid_token
     },
-    invalid_login: function() {
-      return this.verification_opened && !this.$root.is_authenticated;
+    invalid_login: function () {
+      return this.verification_opened && !this.$root.is_authenticated
     },
-    unlinked_patreon: function() {
-      return this.verification_opened && this.$root.is_authenticated && !this.$root.is_linked;
+    unlinked_patreon: function () {
+      return this.verification_opened && this.$root.is_authenticated && !this.$root.is_linked
     },
-    no_subscription: function() {
-      return this.verification_opened && this.$root.is_linked && !this.$root.is_subscribed;
+    no_subscription: function () {
+      return this.verification_opened && this.$root.is_linked && !this.$root.is_subscribed
     },
-    tier_not_selected: function() {
-      return this.verification_opened && this.$root.is_linked && this.$root.is_subscribed && !this.$root.has_reward_tier;
+    tier_not_selected: function () {
+      return this.verification_opened && this.$root.is_linked && this.$root.is_subscribed && !this.$root.has_reward_tier
     },
     combined_token: {
       // getter
       get: function () {
         if (this.$root.$data.username && this.$root.$data.token) {
-          return btoa(this.$root.$data.username + ":" + this.$root.$data.token)
+          return btoa(this.$root.$data.username + ':' + this.$root.$data.token)
         }
-        return "";
+        return ''
       },
       // setter
       set: function (newValue) {
         try {
-          var split = atob(newValue).split(':')
-          this.$root.$data.username = split[0];
-          this.$root.$data.token = split[1];
-          this.invalid_token = false;
+          const split = atob(newValue).split(':')
+          this.$root.$data.username = split[0]
+          this.$root.$data.token = split[1]
+          this.invalid_token = false
         } catch (e) {
-          this.invalid_token = true;
+          this.invalid_token = true
         }
       }
     }
@@ -134,37 +133,35 @@ export default {
       this.$router.go(-1)
     },
     paste: function () {
-      document.getElementById("token").focus();
-      document.execCommand("paste");
-
+      document.getElementById('token').focus()
+      document.execCommand('paste')
     },
-    launch_browser: function(url) {
-      const that = this;
-      let app = this.$root;
-      app.ajax('/api/open-browser', function (e) {
+    launch_browser: function (url) {
+      const that = this
+      this.$http.post('/api/open-browser', {
+        url: url
+      }).then(function () {
         // only open the browser opened message if there isn't an error message currently
         if (!that.verification_opened) {
-          that.browser_opened = true;
+          that.browser_opened = true
         }
-      }, function (e) {}, {
-        "url": url,
-      });
+      }).catch(function () {})
     },
-    verify_token: function() {
-      this.browser_opened = false;
-      this.$root.check_authentication(this.success, this.error);
+    verify_token: function () {
+      this.browser_opened = false
+      this.$root.check_authentication(this.success, this.error)
     },
-    success: function() {
+    success: function () {
       // if they are eligible, go back to the select package page
       if (this.$root.has_reward_tier) {
-        this.$router.go(-1);
-        return;
+        this.$router.go(-1)
+        return
       }
       // They aren't currently eligible for the release, so display the error message
-      this.verification_opened = true;
+      this.verification_opened = true
     },
-    error: function() {
-      this.verification_opened = true;
+    error: function () {
+      this.verification_opened = true
     }
   }
 }

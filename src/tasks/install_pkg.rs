@@ -22,9 +22,9 @@ use crate::logging::LoggingErrors;
 
 use crate::archives;
 
+use crate::tasks::install_desktop_shortcut::InstallDesktopShortcutTask;
 use std::fs::OpenOptions;
 use std::path::Path;
-use tasks::install_desktop_shortcut::InstallDesktopShortcutTask;
 
 pub struct InstallPackageTask {
     pub name: String,
@@ -70,13 +70,18 @@ impl Task for InstallPackageTask {
 
         // Ignore input from the uninstaller - no useful information passed
         // If a previous task Breaks, then just early exit
-        match input.pop().log_expect("Install Package Task should have guaranteed output!") {
+        match input
+            .pop()
+            .log_expect("Install Package Task should have guaranteed output!")
+        {
             TaskParamType::Break => return Ok(TaskParamType::None),
             _ => (),
         };
 
         // Grab data from the resolver
-        let data = input.pop().log_expect("Install Package Task should have input from resolver!");
+        let data = input
+            .pop()
+            .log_expect("Install Package Task should have input from resolver!");
         let (version, file, data) = match data {
             TaskParamType::FileContents(version, file, data) => (version, file, data),
             _ => return Err("Unexpected file contents param type to install package".to_string()),
@@ -201,7 +206,7 @@ impl Task for InstallPackageTask {
                 TaskOrdering::Post,
                 Box::new(InstallDesktopShortcutTask {
                     name: self.name.clone(),
-                    should_run: self.create_desktop_shortcuts
+                    should_run: self.create_desktop_shortcuts,
                 }),
             ),
             TaskDependency::build(TaskOrdering::Post, Box::new(SaveDatabaseTask {})),

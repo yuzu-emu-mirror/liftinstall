@@ -2,7 +2,6 @@
 //!
 //! Provides mechanisms to authenticate users using JWT.
 
-use std::collections::HashMap;
 use std::sync::Arc;
 
 use futures::{Future, Stream};
@@ -13,16 +12,14 @@ use jwt::{decode, Algorithm, Validation};
 
 use reqwest::header::USER_AGENT;
 
-use url::form_urlencoded;
+use crate::frontend::rest::services::Future as InternalFuture;
+use crate::frontend::rest::services::{default_future, Request, Response, WebService};
 
-use frontend::rest::services::Future as InternalFuture;
-use frontend::rest::services::{default_future, Request, Response, WebService};
+use crate::http::{build_async_client, build_client};
 
-use http::{build_async_client, build_client};
+use crate::config::JWTValidation;
 
-use config::JWTValidation;
-
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Auth {
@@ -46,6 +43,12 @@ pub struct JWTClaims {
     pub is_linked: bool,
     #[serde(rename = "isPatreonSubscriptionActive")]
     pub is_subscribed: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct AuthRequest {
+    username: String,
+    token: String
 }
 
 /// Calls the given server to obtain a JWT token and returns a Future<String> with the response
@@ -163,6 +166,7 @@ pub fn validate_token(
 }
 
 pub fn handle(service: &WebService, _req: Request) -> InternalFuture {
+    info!("Handling authentication");
     let framework = service
         .framework
         .read()
@@ -185,14 +189,12 @@ pub fn handle(service: &WebService, _req: Request) -> InternalFuture {
         _req.body()
             .concat2()
             .map(move |body| {
-                let req = form_urlencoded::parse(body.as_ref())
-                    .into_owned()
-                    .collect::<HashMap<String, String>>();
+                let req: AuthRequest = serde_json::from_slice(&body).log_expect("Malformed request");
 
                 // Determine which credentials we should use
                 let (username, token) = {
-                    let req_username = req.get("username").log_expect("No username in request");
-                    let req_token = req.get("token").log_expect("No token in request");
+                    let req_username = req.username;
+                    let req_token = req.token;
 
                     // if the user didn't provide credentials, and theres nothing stored in the
                     // database, return an early error

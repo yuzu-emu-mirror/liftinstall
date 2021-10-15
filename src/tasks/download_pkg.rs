@@ -9,8 +9,6 @@ use crate::tasks::TaskMessage;
 use crate::tasks::TaskOrdering;
 use crate::tasks::TaskParamType;
 
-use crate::tasks::resolver::ResolvePackageTask;
-
 use crate::http::stream_file;
 
 use number_prefix::NumberPrefix::{self, Prefixed, Standalone};

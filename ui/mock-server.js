@@ -100,7 +100,8 @@ app.get('/api/config', (req, res) => {
 })
 
 app.post('/api/start-install', (req, res) => {
-  console.log(`-- Install: ${req}`)
+  console.log('-- Install:')
+  console.log(req.body)
   progressSimulation(res)
 })
 

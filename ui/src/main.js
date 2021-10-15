@@ -152,10 +152,13 @@ const app = new Vue({
       const that = this
       const app = this.$root
 
-      app.ajax('/api/check-auth', function (auth) {
-        app.$data.username = auth.username
-        app.$data.token = auth.token
-        that.jwt_token = auth.jwt_token
+      axios.post('/api/check-auth', {
+        username: app.$data.username,
+        token: app.$data.token
+      }).then(function (resp) {
+        app.$data.username = resp.data.username
+        app.$data.token = resp.data.token
+        that.jwt_token = resp.data.jwt_token
         that.is_authenticated = Object.keys(that.jwt_token).length !== 0 && that.jwt_token.constructor === Object
         if (that.is_authenticated) {
           // Give all permissions to vip roles
@@ -166,13 +169,10 @@ const app = new Vue({
         if (success) {
           success()
         }
-      }, function (e) {
+      }).catch(function () {
         if (error) {
           error()
         }
-      }, {
-        username: app.$data.username,
-        token: app.$data.token
       })
     },
     stream_ajax: streamAjax
