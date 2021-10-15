@@ -13,14 +13,14 @@ let darkMode = false
 
 function progressSimulation (res) {
   if (showError) {
-    var resp = JSON.stringify({ Error: 'Simulated error.' }) + '\n'
+    const resp = JSON.stringify({ Error: 'Simulated error.' }) + '\n'
     res.write(resp)
     res.status(200).end()
     return
   }
-  var progress = 0.0
-  var timer = setInterval(() => {
-    var resp = JSON.stringify({ Status: ['Processing...', progress] }) + '\n'
+  let progress = 0.0
+  const timer = setInterval(() => {
+    const resp = JSON.stringify({ Status: ['Processing...', progress] }) + '\n'
     progress += 0.1
     res.write(resp)
     if (progress >= 1) {
@@ -118,6 +118,19 @@ app.post('/api/verify-path', (req, res) => {
   console.log('-- Verify Path')
   res.send({
     exists: fileExists
+  })
+})
+
+app.post('/api/check-auth', (req, res) => {
+  console.log('-- Check Authorization')
+  res.send({
+    username: 'test1',
+    token: 'token',
+    jwt_token: {
+      isPatreonAccountLinked: true,
+      isPatreonSubscriptionActive: true,
+      releaseChannels: ['early-access']
+    }
   })
 })
 

@@ -69,7 +69,7 @@
 </template>
 
 <script>
-
+const confetti = require('canvas-confetti')
 export default {
   name: 'AuthenticationView',
   created: function () {
@@ -149,8 +149,14 @@ export default {
       this.$root.check_authentication(this.success, this.error)
     },
     success: function () {
-      // if they are eligible, go back to the select package page
       if (this.$root.has_reward_tier) {
+        // show a success animation
+        confetti.default({
+          particleCount: 200,
+          spread: 90,
+          origin: { x: 0.6 }
+        })
+        // if they are eligible, go back to the select package page
         this.$router.go(-1)
         return
       }
