@@ -38,7 +38,22 @@ export default {
   data: function () {
     return {}
   },
+  mounted: function () {
+    if (this.$root.$data.attrs.recovery) {
+      this.recovery()
+    }
+  },
   methods: {
+    recovery: function () {
+      this.$buefy.dialog.alert({
+        title: this.$t('modify.repair'),
+        message: this.$t('modify.prompt_recover', { name: this.$root.$data.attrs.name }),
+        confirmText: this.$t('continue'),
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: this.repair_packages
+      })
+    },
     update: function () {
       this.$router.push('/install/update/false')
     },

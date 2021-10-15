@@ -10,6 +10,7 @@ let maintenance = false
 let launcher = false
 let fileExists = false
 let darkMode = false
+let recoveryMode = false
 
 function progressSimulation (res) {
   if (showError) {
@@ -71,7 +72,7 @@ function returnConfig (res) {
 app.get('/api/attrs', (req, res) => {
   console.log('-- Get attrs')
   res.send(
-    { name: 'yuzu', target_url: 'https://raw.githubusercontent.com/j-selby/test-installer/master/config.linux.v2.toml' }
+    { name: 'yuzu', recovery: recoveryMode, target_url: 'https://raw.githubusercontent.com/j-selby/test-installer/master/config.linux.v2.toml' }
   )
 })
 
@@ -160,6 +161,10 @@ process.argv.forEach((val, index) => {
     case 'error':
       showError = true
       console.log('Simulating errors')
+      break
+    case 'recovery':
+      recoveryMode = true
+      console.log('Simulating recovery mode')
       break
   }
 })

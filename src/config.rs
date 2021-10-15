@@ -84,6 +84,8 @@ pub struct AuthenticationConfig {
 pub struct BaseAttributes {
     pub name: String,
     pub target_url: String,
+    #[serde(default)]
+    pub recovery: bool,
 }
 
 impl BaseAttributes {

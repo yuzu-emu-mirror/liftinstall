@@ -127,7 +127,11 @@ fn main() {
     let metadata_file = current_path.join("metadata.json");
     let mut framework = if metadata_file.exists() {
         info!("Using pre-existing metadata file: {:?}", metadata_file);
-        InstallerFramework::new_with_db(config, current_path).log_expect("Unable to parse metadata")
+        InstallerFramework::new_with_db(config.clone(), current_path).unwrap_or_else(|e| {
+            error!("Failed to load metadata: {:?}", e);
+            warn!("Entering recovery mode");
+            InstallerFramework::new_recovery_mode(config, current_path)
+        })
     } else {
         info!("Starting fresh install");
         fresh_install = true;

@@ -459,6 +459,23 @@ impl InstallerFramework {
         }
     }
 
+    /// The special recovery mode for the Installer Framework.
+    pub fn new_recovery_mode(attrs: BaseAttributes, install_path: &Path) -> Self {
+        InstallerFramework {
+            base_attributes: BaseAttributes {
+                recovery: true,
+                ..attrs
+            },
+            config: None,
+            database: InstallationDatabase::new(),
+            install_path: Some(install_path.to_path_buf()),
+            preexisting_install: true,
+            is_launcher: false,
+            burn_after_exit: false,
+            launcher_path: None,
+        }
+    }
+
     /// Creates a new instance of the Installer Framework with a specified Config, managing
     /// a pre-existing installation.
     pub fn new_with_db(attrs: BaseAttributes, install_path: &Path) -> Result<Self, String> {
