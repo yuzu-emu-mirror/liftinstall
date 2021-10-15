@@ -100,8 +100,7 @@ impl Task for InstallDesktopShortcutTask {
                 &shortcut.name,
                 &shortcut.description,
                 tool_path,
-                // TODO: Send by list
-                &format!("--launcher \"{}\"", exe_path),
+                &["--launcher", exe_path],
                 &starting_dir,
                 exe_path,
             )?);
