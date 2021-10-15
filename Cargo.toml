@@ -9,7 +9,8 @@ description = "An adaptable installer for your application."
 build = "build.rs"
 
 [dependencies]
-web-view = { version = "0.7", features = ["edge"] }
+anyhow = "^1"
+wry = "0.12"
 tinyfiledialogs = "3.8"
 
 hyper = "0.11.27"

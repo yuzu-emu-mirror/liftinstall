@@ -25,13 +25,8 @@ export const i18n = new VueI18n({
 function intercept (method) {
   console[method] = function () {
     const message = Array.prototype.slice.apply(arguments).join(' ')
-    window.external.invoke(
-      JSON.stringify({
-        Log: {
-          kind: method,
-          msg: message
-        }
-      })
+    window.rpc.notify(
+      'Log', method, message
     )
   }
 }
@@ -39,9 +34,7 @@ function intercept (method) {
 // See if we have access to the JSON interface
 let hasExternalInterface = false
 try {
-  window.external.invoke(JSON.stringify({
-    Test: {}
-  }))
+  window.rpc.notify('Test')
   hasExternalInterface = true
 } catch (e) {
   console.warn('Running without JSON interface - unexpected behaviour may occur!')
@@ -50,13 +43,8 @@ try {
 // Overwrite loggers with the logging backend
 if (hasExternalInterface) {
   window.onerror = function (msg, url, line) {
-    window.external.invoke(
-      JSON.stringify({
-        Log: {
-          kind: 'error',
-          msg: msg + ' @ ' + url + ':' + line
-        }
-      })
+    window.rpc.notify(
+      'Log', 'error', msg + ' @ ' + url + ':' + line
     )
   }
 
@@ -90,12 +78,6 @@ axios.get('/api/attrs').then(function (resp) {
 }).catch(function (err) {
   console.error(err)
 })
-
-function selectFileCallback (name) {
-  app.install_location = name
-}
-
-window.selectFileCallback = selectFileCallback
 
 const app = new Vue({
   i18n: i18n,

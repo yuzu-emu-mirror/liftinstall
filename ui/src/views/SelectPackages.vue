@@ -80,7 +80,7 @@ export default {
   data: function () {
     return {
       publicPath: process.env.BASE_URL,
-      advanced: false,
+      advanced: true,
       repair: false,
       installDesktopShortcut: true
     }
@@ -99,11 +99,12 @@ export default {
   },
   methods: {
     select_file: function () {
-      window.external.invoke(JSON.stringify({
-        SelectInstallDir: {
-          callback_name: 'selectFileCallback'
+      const that = this
+      window.rpc.call('SelectInstallDir').then(function (name) {
+        if (name) {
+          that.$root.$data.install_location = name
         }
-      }))
+      })
     },
     show_overwrite_dialog: function (confirmCallback) {
       this.$buefy.dialog.confirm({
