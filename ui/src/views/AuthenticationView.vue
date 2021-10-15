@@ -2,13 +2,10 @@
   <div class="column has-padding">
     <section>
     <b-message type="is-info" :active.sync="browser_opened">
-      Page opened! Check your default browser for the page, and follow the instructions there to link your patreon account.
-      When you are done, enter the token below.
+      {{ $t('auth.page_opened') }}
     </b-message>
     <b-message type="is-info" :active.sync="show_header">
-      The <strong>Early Access</strong> release channel lets you try out the latest experimental features and fixes, before they are merged into yuzu. This channel includes all regular yuzu daily updates, plus these exclusive features.
-
-      To be an Early Access member, you must be a Patreon Early Access Subscriber.
+      {{ $t('auth.page_header') }}
     </b-message>
     <div>
       If you are a subscriber, <a v-on:click="launch_browser('https://profile.yuzu-emu.org/')">click here to link your yuzu-emu.org account</a>
@@ -20,11 +17,11 @@
     <br>
 
     <section>
-      <p>Token</p>
+      <p>{{ $t('auth.token') }}</p>
       <b-field>
         <b-input type="text" v-model="combined_token" placeholder="Token" id="token" style='width: 50em;'></b-input>
         <p class="control">
-          <button class="button is-info" v-on:click="paste">Paste</button>
+          <button class="button is-info" v-on:click="paste">{{ $t('auth.paste') }}</button>
         </p>
       </b-field>
     </section>
@@ -34,13 +31,11 @@
     <section>
 
     <b-message type="is-danger" :active.sync="invalid_token">
-      Login failed!
-      Double check that your token is correct and try again
+      {{ $t('auth.login_failed') }}
     </b-message>
 
     <b-message type="is-danger" :active.sync="invalid_login">
-      Login failed!
-      Double check that your token is correct and try again
+      {{ $t('auth.login_failed') }}
     </b-message>
 
     <b-message type="is-danger" :active.sync="unlinked_patreon">
@@ -61,13 +56,13 @@
 
     <div class="is-left-floating is-bottom-floating">
       <p class="control">
-        <a class="button is-medium" v-on:click="go_back">Back</a>
+        <a class="button is-medium" v-on:click="go_back">{{ $t('back') }}</a>
       </p>
     </div>
 
     <div class="is-right-floating is-bottom-floating">
       <p class="control">
-        <a class="button is-dark is-medium" v-on:click="verify_token">Verify Token</a>
+        <b-button type="is-link is-medium" :loading="loading" v-on:click="verify_token">{{ $t('auth.verify') }}</b-button>
       </p>
     </div>
   </div>
@@ -88,7 +83,8 @@ export default {
     return {
       browser_opened: false,
       verification_opened: false,
-      invalid_token: false
+      invalid_token: false,
+      loading: false
     }
   },
   computed: {
@@ -148,6 +144,7 @@ export default {
       }).catch(function () {})
     },
     verify_token: function () {
+      this.loading = true
       this.browser_opened = false
       this.$root.check_authentication(this.success, this.error)
     },
@@ -159,8 +156,10 @@ export default {
       }
       // They aren't currently eligible for the release, so display the error message
       this.verification_opened = true
+      this.loading = false
     },
     error: function () {
+      this.loading = false
       this.verification_opened = true
     }
   }

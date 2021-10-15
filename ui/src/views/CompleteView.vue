@@ -1,9 +1,9 @@
 <template>
     <div class="column has-padding">
             <div v-if="was_migrate">
-                <h4 class="subtitle">You have been moved to the new, single version of {{ $root.$data.attrs.name }}.</h4>
+                <h4 class="subtitle">{{ $t('complete.migration_finished', {'name': $root.$data.attrs.name}) }}</h4>
 
-                <p>You can find your installed applications in your start menu - if you were in the middle of something, just reattempt.</p>
+                <p>{{ $t('complete.migration_where_to_find') }}</p>
 
                 <img src="../assets/how-to-open.png" alt="Where yuzu is installed"/>
             </div>

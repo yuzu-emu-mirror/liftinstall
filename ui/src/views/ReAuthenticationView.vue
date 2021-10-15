@@ -12,7 +12,7 @@
 
     <div class="is-left-floating is-bottom-floating">
       <p class="control">
-        <a class="button is-medium" v-on:click="go_packages">Back</a>
+        <a class="button is-medium" v-on:click="go_packages">{{ $t('back') }}</a>
       </p>
     </div>
 
