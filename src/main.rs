@@ -71,8 +71,8 @@ use clap::App;
 use clap::Arg;
 
 use config::BaseAttributes;
-use std::process::{Command, Stdio, exit};
 use std::fs;
+use std::process::{exit, Command, Stdio};
 
 const RAW_CONFIG: &str = include_str!(concat!(env!("OUT_DIR"), "/bootstrap.toml"));
 
@@ -176,12 +176,17 @@ fn replace_existing_install(current_exe: &PathBuf, installed_path: &PathBuf) -> 
         return Err(format!("Unable to copy installer binary: {:?}", v));
     }
 
-    let existing = installed_path.join(platform_extension).into_os_string().into_string();
+    let existing = installed_path
+        .join(platform_extension)
+        .into_os_string()
+        .into_string();
     let new = installed_path.join(new_tool).into_os_string().into_string();
     if existing.is_ok() && new.is_ok() {
         // Remove NTFS alternate stream which tells the operating system that the updater was downloaded from the internet
         if cfg!(windows) {
-            let _ = fs::remove_file(installed_path.join("maintenancetool_new.exe:Zone.Identifier:$DATA"));
+            let _ = fs::remove_file(
+                installed_path.join("maintenancetool_new.exe:Zone.Identifier:$DATA"),
+            );
         }
         info!("Launching {:?}", existing);
         let success = Command::new(new.unwrap())

@@ -58,6 +58,8 @@ which = "4.0"
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["psapi", "winbase", "winioctl", "winnt"] }
 widestring = "0.4"
+webview2 = "0.1"
+tempfile = "3"
 
 [target.'cfg(not(windows))'.dependencies]
 sysinfo = "0.20"

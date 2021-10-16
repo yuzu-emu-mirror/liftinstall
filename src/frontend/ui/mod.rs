@@ -15,9 +15,19 @@ use wry::{
 
 use log::Level;
 
+use crate::logging::LoggingErrors;
+
 /// Starts the main web UI. Will return when UI is closed.
 pub fn start_ui(app_name: &str, http_address: &str, is_launcher: bool) -> Result<()> {
-    let size = if is_launcher { (600.0, 300.0) } else { (1024.0, 600.0) };
+    #[cfg(windows)]
+    {
+        crate::native::prepare_install_webview2(app_name).log_expect("Unable to install webview2");
+    }
+    let size = if is_launcher {
+        (600.0, 300.0)
+    } else {
+        (1024.0, 600.0)
+    };
     info!("Spawning web view instance");
 
     let event_loop = EventLoop::new();
