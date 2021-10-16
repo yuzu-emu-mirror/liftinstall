@@ -7,7 +7,7 @@
         <div class="tile is-ancestor">
             <div class="tile is-parent" v-for="Lpackage in $root.$data.config.packages" :key="Lpackage.name" :index="Lpackage.name">
                 <div class="tile is-child">
-                    <div class="box clickable-box" v-on:click.capture.stop="Lpackage.default = !Lpackage.default">
+                    <div class="box clickable-box" v-on:click.capture.stop="clicked_box(Lpackage)">
                         <div class="ribbon" v-if="Lpackage.is_new"><span>New!</span></div>
                         <label class="checkbox">
                             <b-checkbox v-model="Lpackage.default">
