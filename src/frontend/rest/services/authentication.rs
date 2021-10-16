@@ -128,14 +128,10 @@ pub fn validate_token(
 ) -> Result<JWTClaims, String> {
     // Get the public key for this authentication url
     let pub_key = if pub_key_base64.is_empty() {
-        DecodingKey::from_secret(&[])
+        vec![]
     } else {
-        DecodingKey::from_base64_secret(&pub_key_base64).map_err(|e| {
-            format!(
-                "Configured public key was not empty and did not decode as base64 {:?}",
-                e
-            )
-        })?
+        base64::decode(&pub_key_base64)
+            .map_err(|e| format!("Configured public key was not empty and did not decode as base64 {:?}", e))?
     };
 
     // Configure validation for audience and issuer if the configuration provides it
@@ -153,7 +149,7 @@ pub fn validate_token(
     validation.validate_exp = false;
     validation.validate_nbf = false;
     // Verify the JWT token
-    decode::<JWTClaims>(&body, &pub_key, &validation)
+    decode::<JWTClaims>(&body, &DecodingKey::from_rsa_der(&pub_key), &validation)
         .map(|tok| tok.claims)
         .map_err(|err| {
             format!(

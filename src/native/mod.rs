@@ -20,7 +20,6 @@ mod natives {
     use std::env;
     use std::os::windows::ffi::OsStrExt;
     use std::path::Path;
-    use std::process::Command;
 
     use winapi::shared::minwindef::{DWORD, FALSE, MAX_PATH};
 

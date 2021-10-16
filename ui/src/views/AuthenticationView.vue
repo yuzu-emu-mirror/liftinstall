@@ -19,9 +19,9 @@
     <section>
       <p>{{ $t('auth.token') }}</p>
       <b-field>
-        <b-input type="text" v-model="combined_token" placeholder="Token" id="token" style='width: 50em;'></b-input>
+        <b-input type="text" v-model="combined_token" placeholder="Token" id="token" style='width: 80%;'></b-input>
         <p class="control">
-          <button class="button is-info" v-on:click="paste">{{ $t('auth.paste') }}</button>
+          <b-button type="is-info" v-on:click="paste">{{ $t('auth.paste') }}</b-button>
         </p>
       </b-field>
     </section>
@@ -130,7 +130,10 @@ export default {
     },
     paste: function () {
       document.getElementById('token').focus()
-      document.execCommand('paste')
+      const that = this
+      navigator.clipboard.readText().then(function (v) {
+        that.combined_token = v
+      }).catch(function () {})
     },
     launch_browser: function (url) {
       const that = this

@@ -10,6 +10,9 @@ import messages from './locales/messages.json'
 import 'buefy/dist/buefy.css'
 import '@mdi/font/css/materialdesignicons.min.css'
 
+// HACK: disables context menu
+document.addEventListener('contextmenu', event => event.preventDefault())
+
 Vue.config.productionTip = false
 Vue.use(Buefy)
 Vue.use(VueI18n)

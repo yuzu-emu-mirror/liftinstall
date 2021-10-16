@@ -1423,7 +1423,7 @@ dependencies = [
  "walkdir",
  "webbrowser",
  "which",
- "widestring 0.5.0",
+ "widestring",
  "winapi 0.3.9",
  "winres",
  "wry",
@@ -3364,7 +3364,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ecad156490d6b620308ed411cfee90d280b3cbd13e189ea0d3fada8acc89158a"
 dependencies = [
  "web-sys",
- "widestring 0.4.3",
+ "widestring",
  "winapi 0.3.9",
 ]
 
@@ -3423,7 +3423,7 @@ dependencies = [
  "com",
  "once_cell",
  "webview2-sys",
- "widestring 0.4.3",
+ "widestring",
  "winapi 0.3.9",
 ]
 
@@ -3453,12 +3453,6 @@ name = "widestring"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c168940144dd21fd8046987c16a46a33d5fc84eec29ef9dcddc2ac9e31526b7c"
-
-[[package]]
-name = "widestring"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15be6395051be4e41efeee975b7561b8c602ba30204bfa35fefa0f85582075b6"
 
 [[package]]
 name = "winapi"
