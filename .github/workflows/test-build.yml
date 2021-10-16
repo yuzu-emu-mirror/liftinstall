@@ -49,5 +49,10 @@ jobs:
     - run: npm install -g yarn
 
     - uses: actions/checkout@v2
+    - name: Download Webview2
+      run: Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/p/?LinkId=2124703' -OutFile 'MicrosoftEdgeWebview2Setup.exe'
+      if: runner.os == 'Windows'
+      shell: pwsh
+
     - name: Build
       run: cargo build --verbose
