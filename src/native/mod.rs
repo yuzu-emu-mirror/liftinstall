@@ -337,7 +337,7 @@ mod natives {
 
     use crate::logging::LoggingErrors;
 
-    use sysinfo::{ProcessExt, SystemExt};
+    use sysinfo::{ProcessExt, SystemExt, PidExt};
 
     use dirs;
 
@@ -444,7 +444,7 @@ mod natives {
         system.refresh_all();
         for (pid, procs) in system.processes() {
             processes.push(super::Process {
-                pid: *pid as usize,
+                pid: pid.as_u32() as usize,
                 name: procs.name().to_string(),
             });
         }

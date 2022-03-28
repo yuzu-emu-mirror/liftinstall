@@ -7,6 +7,7 @@ repository = "https://github.com/j-selby/liftinstall.git"
 documentation = "https://liftinstall.jselby.net"
 description = "An adaptable installer for your application."
 build = "build.rs"
+resolver = "2"
 
 [dependencies]
 anyhow = "^1"
@@ -31,7 +32,7 @@ semver = {version = "1.0", features = ["serde"]}
 regex = "1.4"
 
 dirs = "^4"
-zip = "0.5"
+zip = "0.6"
 xz2 = "0.1"
 tar = "0.4"
 
@@ -42,7 +43,7 @@ chrono = "0.4"
 clap = "2.33"
 
 # used to open a link to the users default browser
-webbrowser = "0.5"
+webbrowser = "0.6"
 # used in JWT based package authentication
 jsonwebtoken = "7"
 # used to decode the public key for verifying JWT tokens
@@ -57,12 +58,12 @@ which = "4.0"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["psapi", "winbase", "winioctl", "winnt"] }
-widestring = "0.4"
+widestring = "0.5"
 webview2 = "0.1"
 tempfile = "3"
 
 [target.'cfg(not(windows))'.dependencies]
-sysinfo = "0.20"
+sysinfo = "0.23"
 slug = "0.1"
 
 [target.'cfg(windows)'.build-dependencies]
