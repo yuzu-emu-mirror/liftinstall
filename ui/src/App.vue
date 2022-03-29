@@ -18,7 +18,7 @@
                         <h2 class="subtitle" v-if="$root.$data.metadata.preexisting_install">
                             {{ $t('app.maintenance_title', {'name': $root.$data.attrs.name}) }}
                         </h2>
-                        <b-dropdown hoverable @change="selectLocale" aria-role="list">
+                        <b-dropdown hoverable @change="selectLocale" aria-role="list" scrollable>
                             <button class="button" slot="trigger">
                                 <span>{{ $t('locale') }}</span>
                                 <b-icon icon="menu-down"></b-icon>
