@@ -61,7 +61,14 @@ export default {
       this.$router.push('/packages')
     },
     repair_packages: function () {
-      this.$router.push({ name: 'packages', params: { repair: true } })
+      this.$buefy.dialog.alert({
+        title: this.$t('modify.repair'),
+        message: this.$t('modify.prompt_recover', { name: this.$root.$data.attrs.name }),
+        confirmText: this.$t('continue'),
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => { this.$router.push({ name: 'packages', params: { repair: true } }) }
+      })
     },
     prepare_uninstall: function () {
       this.$buefy.dialog.confirm({
