@@ -55,6 +55,7 @@ serde = "1.0"
 serde_derive = "1.0"
 toml = "0.5"
 which = "4.0"
+image = { version = "0.24", default-features = false, features = ["ico"] }
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["psapi", "winbase", "winioctl", "winnt"] }
