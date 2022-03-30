@@ -20,6 +20,7 @@
       "update": "Actualização",
       "uninstall": "Desinstalar",
       "prompt": "Você tem certeza de que deseja desinstalar o {name}?",
+      "prompt_repair": "<b>WARNING:</b> All the files under <code>{path}</code> will be <b>deleted</b> as part of the repair process!<br>Do you wish to proceed?",
       "view_local_files": "Ver arquivos locais",
       "prompt_recover": "Os dados do instalador do {name} estão corrompidos.<br>Um reparo é necessário para restaurar a instalação.",
       "prompt_confirm": "Desinstalar o {name}",
@@ -57,7 +58,7 @@
       "options": "Opções de instalação",
       "title_repair": "Selecione quais pacotes você deseja reparar:",
       "location_placeholder": "Insira aqui um caminho de instalação",
-      "overwriting_warning": "O diretório {path} já existe.<br>Você tem certeza de que deseja <b>sobrescrever</b> o conteúdo que está dentro?",
+      "overwriting_warning": "Directory <code>{path}</code> already exists.<br>Are you sure you want to <b>overwrite</b> the contents inside?",
       "nothing_picked_warning": "Por favor, selecione pelo menos um pacote para instalar!",
       "nothing_picked": "Nada selecionado",
       "option_shortcut": "Criar atalho na Área de Trabalho"

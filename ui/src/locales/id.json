@@ -20,6 +20,7 @@
       "update": "Perbaharui",
       "uninstall": "Copot Instalasi",
       "prompt": "Apakah anda yakin untuk menghapus {name}?",
+      "prompt_repair": "<b>WARNING:</b> All the files under <code>{path}</code> will be <b>deleted</b> as part of the repair process!<br>Do you wish to proceed?",
       "view_local_files": "Lihat file lokal",
       "prompt_recover": "Data instalatur untuk {name} rusak.<br>Diperlukan perbaikan untuk memulihkan instalasi.",
       "prompt_confirm": "Hapus {name}",
@@ -57,7 +58,7 @@
       "options": "Opsi Instal",
       "title_repair": "Pilih paket mana yang ingin anda perbaiki:",
       "location_placeholder": "Masukkan lokasi instal di sini",
-      "overwriting_warning": "Direktori {path} sudah ada.<br>Apakah anda yakin ingin <b>menimpa</b> konten di dalam?",
+      "overwriting_warning": "Directory <code>{path}</code> already exists.<br>Are you sure you want to <b>overwrite</b> the contents inside?",
       "nothing_picked_warning": "Silakan pilih setidaknya satu paket untuk diinstal!",
       "nothing_picked": "Tidak ada yang dipilih",
       "option_shortcut": "Buat Pintasan Desktop"

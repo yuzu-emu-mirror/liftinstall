@@ -20,6 +20,7 @@
       "update": "Zaktualizuj",
       "uninstall": "Odinstaluj",
       "prompt": "Czy na pewno chcesz odinstalować {name}?",
+      "prompt_repair": "<b>WARNING:</b> All the files under <code>{path}</code> will be <b>deleted</b> as part of the repair process!<br>Do you wish to proceed?",
       "view_local_files": "Wyświetl lokalne pliki",
       "prompt_recover": "Dane instalatora dla {name} są uszkodzone. <br>Do przywrócenia instalacji wymagana jest naprawa.",
       "prompt_confirm": "Odinstaluj {name}",
@@ -57,7 +58,7 @@
       "options": "Opcje instalacji",
       "title_repair": "Wybierz które pakiety chcesz naprawić:",
       "location_placeholder": "Wybierz miejsce instalacji",
-      "overwriting_warning": "Katalog {path} już istnieje. <br>Czy na pewno chcesz <b>zastąpić </b>jego zawartość?",
+      "overwriting_warning": "Directory <code>{path}</code> already exists.<br>Are you sure you want to <b>overwrite</b> the contents inside?",
       "nothing_picked_warning": "Wybierz co najmniej jeden pakiet do zainstalowania!",
       "nothing_picked": "Nic nie wybrano",
       "option_shortcut": "Utwórz skrót na pulpicie"
