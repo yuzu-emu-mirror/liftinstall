@@ -23,7 +23,7 @@
       "location_placeholder":"Enter a install path here",
       "select":"Select",
       "overwriting": "Overwriting",
-      "overwriting_warning": "Directory {path} already exists.<br>Are you sure you want to <b>overwrite</b> the contents inside?",
+      "overwriting_warning": "Directory <code>{path}</code> already exists.<br>Are you sure you want to <b>overwrite</b> the contents inside?",
       "nothing_picked": "Nothing selected",
       "nothing_picked_warning": "Please select at least one package to install!",
       "options": "Install Options",
@@ -57,7 +57,7 @@
       "repair": "Repair",
       "uninstall":"Uninstall",
       "view_local_files": "View local files",
-      "prompt_repair": "<b>WARNING:</b> All the files under {path} will be <b>deleted</b> as part of the repair process! Do you wish to proceed?",
+      "prompt_repair": "<b>WARNING:</b> All the files under <code>{path}</code> will be <b>deleted</b> as part of the repair process!<br>Do you wish to proceed?",
       "prompt_recover": "Installer data for {name} is corrupted.<br>A repair is required to restore the installation.",
       "prompt":"Are you sure you want to uninstall {name}?",
       "prompt_confirm":"Uninstall {name}"

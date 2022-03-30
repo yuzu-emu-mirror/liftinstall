@@ -61,9 +61,10 @@ export default {
       this.$router.push('/packages')
     },
     repair_packages: function () {
-      this.$buefy.dialog.alert({
+      this.$buefy.dialog.confirm({
         title: this.$t('modify.repair'),
-        message: this.$t('modify.prompt_recover', { name: this.$root.$data.attrs.name }),
+        message: this.$t('modify.prompt_repair', { path: this.$root.$data.metadata.install_path }),
+        cancelText: this.$t('cancel'),
         confirmText: this.$t('continue'),
         type: 'is-danger',
         hasIcon: true,
