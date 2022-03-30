@@ -182,6 +182,10 @@ pre {
     background: #fff;
 }
 
+.tile.box.clickable-box {
+    color: #4a4a4a;
+}
+
 /* Dark mode */
 body.has-background-black-ter .subtitle, body.has-background-black-ter .column > div {
     color: hsl(0, 0%, 96%);
