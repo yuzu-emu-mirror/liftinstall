@@ -8,7 +8,7 @@ use wry::{
         dpi::LogicalSize,
         event::{Event, StartCause, WindowEvent},
         event_loop::{ControlFlow, EventLoop},
-        window::{WindowBuilder, Icon},
+        window::{Icon, WindowBuilder},
     },
     webview::{RpcResponse, WebViewBuilder},
 };
@@ -32,7 +32,8 @@ pub fn start_ui(app_name: &str, http_address: &str, is_launcher: bool) -> Result
     };
     info!("Spawning web view instance");
 
-    let window_icon = Icon::from_rgba(ICON_DATA.to_vec(), 48, 48).log_expect("Unable to construct window icon");
+    let window_icon =
+        Icon::from_rgba(ICON_DATA.to_vec(), 48, 48).log_expect("Unable to construct window icon");
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
         .with_title(format!("{} Installer", app_name))

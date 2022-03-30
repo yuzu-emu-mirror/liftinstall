@@ -105,7 +105,9 @@ fn main() {
     // bundle the icon
     let mut f = File::create(output_dir.join("icon-data.bin")).unwrap();
     let icon_file = image::open("ui/public/favicon.ico").expect("Unable to read the icon file");
-    let icon_data = icon_file.resize_exact(48, 48, FilterType::Triangle).to_rgba8();
+    let icon_data = icon_file
+        .resize_exact(48, 48, FilterType::Triangle)
+        .to_rgba8();
     f.write_all(&icon_data.into_vec()).unwrap();
 
     // Build and deploy frontend files

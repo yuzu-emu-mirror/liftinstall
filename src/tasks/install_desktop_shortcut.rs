@@ -30,7 +30,10 @@ impl Task for InstallDesktopShortcutTask {
         }
 
         messenger(&TaskMessage::DisplayMessage(
-            &format!("Generating desktop shortcuts for package {:?}...", self.name),
+            &format!(
+                "Generating desktop shortcuts for package {:?}...",
+                self.name
+            ),
             0.0,
         ));
 
@@ -51,12 +54,12 @@ impl Task for InstallDesktopShortcutTask {
             .as_ref()
             .log_expect("Should have packages by now")
             .packages
-            {
-                if self.name == description.name {
-                    metadata = Some(description.clone());
-                    break;
-                }
+        {
+            if self.name == description.name {
+                metadata = Some(description.clone());
+                break;
             }
+        }
 
         let package = match metadata {
             Some(v) => v,
@@ -108,6 +111,9 @@ impl Task for InstallDesktopShortcutTask {
     }
 
     fn name(&self) -> String {
-        format!("InstallDesktopShortcutTask (for {:?}, should_run = {:?})", self.name, self.should_run)
+        format!(
+            "InstallDesktopShortcutTask (for {:?}, should_run = {:?})",
+            self.name, self.should_run
+        )
     }
 }

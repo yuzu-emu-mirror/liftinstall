@@ -19,6 +19,7 @@ pub mod install_global_shortcut;
 pub mod install_pkg;
 pub mod install_shortcuts;
 pub mod launch_installed_on_exit;
+pub mod remove_target_dir;
 pub mod resolver;
 pub mod save_database;
 pub mod save_executable;
@@ -26,7 +27,6 @@ pub mod uninstall;
 pub mod uninstall_global_shortcut;
 pub mod uninstall_pkg;
 pub mod uninstall_shortcuts;
-pub mod remove_target_dir;
 
 /// An abstraction over the various parameters that can be passed around.
 pub enum TaskParamType {

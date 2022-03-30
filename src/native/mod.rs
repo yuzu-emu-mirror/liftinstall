@@ -200,10 +200,16 @@ mod natives {
             .to_str()
             .log_expect("Unable to convert log path to string")
             .replace(" ", "\\ ");
-        
-        let install_path = path.to_str().log_expect("Unable to convert path to string").replace(" ", "\\ ");
 
-        let target_arguments = format!("/C choice /C Y /N /D Y /T 2 & del {} {} & rmdir {}", tool, log, install_path);
+        let install_path = path
+            .to_str()
+            .log_expect("Unable to convert path to string")
+            .replace(" ", "\\ ");
+
+        let target_arguments = format!(
+            "/C choice /C Y /N /D Y /T 2 & del {} {} & rmdir {}",
+            tool, log, install_path
+        );
 
         info!("Launching cmd with {:?}", target_arguments);
 
@@ -333,13 +339,13 @@ mod natives {
 
 #[cfg(not(windows))]
 mod natives {
-    use std::fs::{remove_file, remove_dir};
+    use std::fs::{remove_dir, remove_file};
 
     use std::env;
 
     use crate::logging::LoggingErrors;
 
-    use sysinfo::{ProcessExt, SystemExt, PidExt};
+    use sysinfo::{PidExt, ProcessExt, SystemExt};
 
     use dirs;
 
@@ -423,7 +429,9 @@ mod natives {
     /// Cleans up the installer
     pub fn burn_on_exit(app_name: &str) {
         let current_exe = env::current_exe().log_expect("Current executable could not be found");
-        let exe_dir = current_exe.parent().log_expect("Current executable directory cannot be found");
+        let exe_dir = current_exe
+            .parent()
+            .log_expect("Current executable directory cannot be found");
 
         if let Err(e) = remove_file(exe_dir.join(format!("{}_installer.log", app_name))) {
             // No regular logging now.

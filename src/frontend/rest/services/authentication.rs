@@ -130,8 +130,12 @@ pub fn validate_token(
     let pub_key = if pub_key_base64.is_empty() {
         vec![]
     } else {
-        base64::decode(&pub_key_base64)
-            .map_err(|e| format!("Configured public key was not empty and did not decode as base64 {:?}", e))?
+        base64::decode(&pub_key_base64).map_err(|e| {
+            format!(
+                "Configured public key was not empty and did not decode as base64 {:?}",
+                e
+            )
+        })?
     };
 
     // Configure validation for audience and issuer if the configuration provides it

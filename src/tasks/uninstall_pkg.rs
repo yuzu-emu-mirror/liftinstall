@@ -64,7 +64,7 @@ impl Task for UninstallPackageTask {
         ));
 
         let mut directories = Vec::new();
-        
+
         let max = package.files.len();
         for (i, file) in package.files.iter().enumerate() {
             let name = file.clone();

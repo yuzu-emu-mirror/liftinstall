@@ -211,7 +211,7 @@ impl InstallerFramework {
             uninstall_items,
             fresh_install,
             create_desktop_shortcuts,
-            force_install
+            force_install,
         });
 
         let mut tree = DependencyTree::build(task);

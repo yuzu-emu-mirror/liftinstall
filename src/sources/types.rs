@@ -23,9 +23,7 @@ impl Version {
     fn coarse_into_semver(&self) -> SemverVersion {
         match *self {
             Version::Semver(ref version) => version.to_owned(),
-            Version::Integer(ref version) => {
-                SemverVersion::new(version.to_owned(), 0u64, 0u64)
-            }
+            Version::Integer(ref version) => SemverVersion::new(version.to_owned(), 0u64, 0u64),
         }
     }
 

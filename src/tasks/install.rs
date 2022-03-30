@@ -6,10 +6,10 @@ use crate::tasks::ensure_only_instance::EnsureOnlyInstanceTask;
 use crate::tasks::install_dir::VerifyInstallDirTask;
 use crate::tasks::install_global_shortcut::InstallGlobalShortcutsTask;
 use crate::tasks::install_pkg::InstallPackageTask;
+use crate::tasks::launch_installed_on_exit::LaunchOnExitTask;
 use crate::tasks::remove_target_dir::RemoveTargetDirTask;
 use crate::tasks::save_executable::SaveExecutableTask;
 use crate::tasks::uninstall_pkg::UninstallPackageTask;
-use crate::tasks::launch_installed_on_exit::LaunchOnExitTask;
 
 use crate::tasks::Task;
 use crate::tasks::TaskDependency;
@@ -72,7 +72,10 @@ impl Task for InstallTask {
         for item in &self.items {
             elements.push(TaskDependency::build(
                 TaskOrdering::Pre,
-                Box::new(InstallPackageTask { name: item.clone(), create_desktop_shortcuts: self.create_desktop_shortcuts }),
+                Box::new(InstallPackageTask {
+                    name: item.clone(),
+                    create_desktop_shortcuts: self.create_desktop_shortcuts,
+                }),
             ));
         }
 
@@ -89,7 +92,7 @@ impl Task for InstallTask {
 
             elements.push(TaskDependency::build(
                 TaskOrdering::Post,
-                Box::new(LaunchOnExitTask {})
+                Box::new(LaunchOnExitTask {}),
             ))
         }
 
