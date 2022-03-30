@@ -200,8 +200,10 @@ mod natives {
             .to_str()
             .log_expect("Unable to convert log path to string")
             .replace(" ", "\\ ");
+        
+        let install_path = path.to_str().log_expect("Unable to convert path to string").replace(" ", "\\ ");
 
-        let target_arguments = format!("/C choice /C Y /N /D Y /T 2 & del {} {}", tool, log);
+        let target_arguments = format!("/C choice /C Y /N /D Y /T 2 & del {} {} & rmdir {}", tool, log, install_path);
 
         info!("Launching cmd with {:?}", target_arguments);
 
@@ -331,7 +333,7 @@ mod natives {
 
 #[cfg(not(windows))]
 mod natives {
-    use std::fs::remove_file;
+    use std::fs::{remove_file, remove_dir};
 
     use std::env;
 
@@ -421,19 +423,20 @@ mod natives {
     /// Cleans up the installer
     pub fn burn_on_exit(app_name: &str) {
         let current_exe = env::current_exe().log_expect("Current executable could not be found");
+        let exe_dir = current_exe.parent().log_expect("Current executable directory cannot be found");
+
+        if let Err(e) = remove_file(exe_dir.join(format!("{}_installer.log", app_name))) {
+            // No regular logging now.
+            eprintln!("Failed to delete maintenance log: {:?}", e);
+        };
 
         // Thank god for *nix platforms
         if let Err(e) = remove_file(&current_exe) {
             // No regular logging now.
             eprintln!("Failed to delete maintenancetool: {:?}", e);
         };
-
-        let current_dir = env::current_dir().log_expect("Current directory cannot be found");
-
-        if let Err(e) = remove_file(current_dir.join(format!("{}_installer.log", app_name))) {
-            // No regular logging now.
-            eprintln!("Failed to delete installer log: {:?}", e);
-        };
+        // delete the directory if not empty and ignore errors (since we can't handle errors anymore)
+        remove_dir(exe_dir).ok();
     }
 
     /// Returns a list of running processes
