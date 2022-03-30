@@ -15,8 +15,6 @@ use wry::{
 
 use log::Level;
 
-use crate::logging::LoggingErrors;
-
 /// Starts the main web UI. Will return when UI is closed.
 pub fn start_ui(app_name: &str, http_address: &str, is_launcher: bool) -> Result<()> {
     #[cfg(windows)]
