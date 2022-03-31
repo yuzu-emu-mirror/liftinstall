@@ -27,7 +27,7 @@ export default {
     // See if we need to migrate yuzu to mainline
     let need_migrate = false
     for (const package_id in this.$root.metadata.database.packages) {
-      var name = this.$root.metadata.database.packages[package_id].name
+      const name = this.$root.metadata.database.packages[package_id].name
       if ((name.indexOf('Nightly') !== -1 || name.indexOf('Canary') !== -1)) {
         console.log('Migration needed (found "' + name + '", move to mainline)')
 
@@ -38,7 +38,7 @@ export default {
 
         // Migration step: enable mainline
         for (const sub_package_id in this.$root.config.packages) {
-          var name = this.$root.config.packages[sub_package_id].name
+          const name = this.$root.config.packages[sub_package_id].name
           if (name === 'yuzu') {
             this.$root.config.packages[sub_package_id].default = true
             break
