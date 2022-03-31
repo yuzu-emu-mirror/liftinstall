@@ -11,7 +11,7 @@ use crate::config::PackageDescription;
 
 use crate::logging::LoggingErrors;
 
-use crate::native::create_shortcut;
+use crate::native::create_desktop_shortcut;
 
 pub struct InstallDesktopShortcutTask {
     pub name: String,
@@ -84,7 +84,7 @@ impl Task for InstallDesktopShortcutTask {
                 .to_str()
                 .log_expect("Unable to build shortcut metadata (exe)");
 
-            installed_files.push(create_shortcut(
+            installed_files.push(create_desktop_shortcut(
                 &shortcut.name,
                 &shortcut.description,
                 tool_path,

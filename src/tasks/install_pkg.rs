@@ -3,7 +3,7 @@
 use crate::installer::InstallerFramework;
 
 use crate::tasks::download_pkg::DownloadPackageTask;
-use crate::tasks::install_global_shortcut::InstallGlobalShortcutsTask;
+use crate::tasks::install_shortcuts::InstallShortcutsTask;
 use crate::tasks::save_database::SaveDatabaseTask;
 use crate::tasks::uninstall_pkg::UninstallPackageTask;
 use crate::tasks::Task;
@@ -196,7 +196,12 @@ impl Task for InstallPackageTask {
                     optional: true,
                 }),
             ),
-            TaskDependency::build(TaskOrdering::Post, Box::new(InstallGlobalShortcutsTask {})),
+            TaskDependency::build(
+                TaskOrdering::Post,
+                Box::new(InstallShortcutsTask {
+                    name: self.name.clone(),
+                }),
+            ),
             TaskDependency::build(
                 TaskOrdering::Post,
                 Box::new(InstallDesktopShortcutTask {
