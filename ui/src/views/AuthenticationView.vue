@@ -19,7 +19,7 @@
     <section>
       <p>{{ $t('auth.token') }}</p>
       <b-field>
-        <b-input type="text" v-model="combined_token" placeholder="Token" id="token" style='width: 80%;'></b-input>
+        <b-input type="text" v-model="combined_token" :placeholder="$t('auth.token')" id="token" style='width: 80%;'></b-input>
         <p class="control">
           <b-button type="is-info" v-on:click="paste">{{ $t('auth.paste') }}</b-button>
         </p>
@@ -30,11 +30,7 @@
 
     <section>
 
-    <b-message type="is-danger" :active.sync="invalid_token">
-      {{ $t('auth.login_failed') }}
-    </b-message>
-
-    <b-message type="is-danger" :active.sync="invalid_login">
+    <b-message id="invalid-token" type="is-danger" :active.sync="show_error">
       {{ $t('auth.login_failed') }}
     </b-message>
 
@@ -89,7 +85,10 @@ export default {
   },
   computed: {
     show_header: function () {
-      return !this.browser_opened && !this.verification_opened && !this.invalid_token
+      return !this.browser_opened && !this.verification_opened
+    },
+    show_error: function () {
+      return this.invalid_login || this.invalid_token
     },
     invalid_login: function () {
       return this.verification_opened && !this.$root.is_authenticated
@@ -113,6 +112,10 @@ export default {
       },
       // setter
       set: function (newValue) {
+        if (!newValue || !newValue.trim()) {
+          this.invalid_token = true
+          return
+        }
         try {
           const split = atob(newValue).split(':')
           this.$root.$data.username = split[0]
@@ -129,10 +132,10 @@ export default {
       this.$router.go(-1)
     },
     paste: function () {
-      document.getElementById('token').focus()
+      window.document.getElementById('token').focus()
       const that = this
-      navigator.clipboard.readText().then(function (v) {
-        that.combined_token = v
+      window.navigator.clipboard.readText().then(function (v) {
+        that.combined_token = v.trim()
       }).catch(function () {})
     },
     launch_browser: function (url) {
@@ -146,7 +149,18 @@ export default {
         }
       }).catch(function () {})
     },
+    blink_error: function () {
+      const target = document.getElementById('invalid-token')
+      target.classList.add('blink-block')
+      setTimeout(function () {
+        target.classList.remove('blink-block')
+      }, 1200)
+    },
     verify_token: function () {
+      if (this.invalid_token) {
+        this.blink_error()
+        return
+      }
       this.loading = true
       this.browser_opened = false
       this.$root.check_authentication(this.success, this.error)
@@ -170,7 +184,19 @@ export default {
     error: function () {
       this.loading = false
       this.verification_opened = true
+      this.blink_error()
     }
   }
 }
 </script>
+
+<style>
+.blink-block {
+  animation: blink 0.3s linear infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0
+  }
+}
+</style>

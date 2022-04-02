@@ -187,8 +187,12 @@ pub fn handle(service: &WebService, _req: Request) -> InternalFuture {
         _req.body()
             .concat2()
             .map(move |body| {
-                let req: AuthRequest =
-                    serde_json::from_slice(&body).log_expect("Malformed request");
+                let req = serde_json::from_slice::<AuthRequest>(&body);
+                if req.is_err() {
+                    warn!("Failed to parse auth request from the frontend");
+                    return default_future(Response::new().with_status(hyper::StatusCode::BadRequest));
+                }
+                let req = req.unwrap();
 
                 // Determine which credentials we should use
                 let (username, token) = {
