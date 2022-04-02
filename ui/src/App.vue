@@ -234,4 +234,7 @@ body.has-background-black-ter .subtitle, body.has-background-black-ter .column >
     border-bottom: 3px solid transparent;
     border-top: 3px solid #FF3C28;
 }
+a:hover {
+    text-decoration: underline;
+}
 </style>
