@@ -5,7 +5,7 @@
 
         <!-- Build options -->
         <div class="tile is-ancestor">
-            <div class="tile is-parent" v-for="Lpackage in $root.$data.config.packages" :key="Lpackage.name" :index="Lpackage.name">
+            <div class="tile is-parent selection-box" v-for="Lpackage in $root.$data.config.packages" :key="Lpackage.name" :index="Lpackage.name">
                 <div class="tile is-child">
                     <div class="box clickable-box" v-on:click.capture.stop="clicked_box(Lpackage)">
                         <div class="ribbon" v-if="Lpackage.is_new"><span>New!</span></div>
@@ -197,3 +197,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.selection-box {
+  cursor: pointer;
+}
+</style>

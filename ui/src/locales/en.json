@@ -57,7 +57,7 @@
       "repair": "Repair",
       "uninstall":"Uninstall",
       "view_local_files": "View local files",
-      "prompt_repair": "<b>WARNING:</b> All the files under <code>{path}</code> will be <b>deleted</b> as part of the repair process!<br>Do you wish to proceed?",
+      "prompt_repair": "<b>WARNING:</b> All the files under <code>{path}</code> will be <b>deleted</b> as part of the repair process!<br>Do you wish to continue?",
       "prompt_recover": "Installer data for {name} is corrupted.<br>A repair is required to restore the installation.",
       "prompt":"Are you sure you want to uninstall {name}?",
       "prompt_confirm":"Uninstall {name}"
