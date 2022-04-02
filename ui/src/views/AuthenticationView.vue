@@ -62,7 +62,7 @@
 
     <div class="is-right-floating is-bottom-floating">
       <p class="control">
-        <b-button type="is-link is-medium" :loading="loading" v-on:click="verify_token">{{ $t('auth.verify') }}</b-button>
+        <b-button type="is-primary is-medium" :loading="loading" v-on:click="verify_token">{{ $t('auth.verify') }}</b-button>
       </p>
     </div>
   </div>

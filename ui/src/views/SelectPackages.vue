@@ -42,7 +42,7 @@
                         :placeholder="$t('select_packages.location_placeholder')">
             </div>
             <div class="control">
-                <b-button class="is-dark" v-on:click="select_file">
+                <b-button class="is-link is-info" v-on:click="select_file">
                     {{ $t('select_packages.select') }}
                 </b-button>
             </div>
@@ -51,15 +51,15 @@
         <div class="is-right-floating is-bottom-floating">
             <div class="field is-grouped">
                 <p class="control">
-                    <b-button class="is-medium" v-if="!$root.$data.config.hide_advanced && !$root.$data.metadata.preexisting_install && !advanced"
+                    <b-button class="is-primary is-medium" v-if="!$root.$data.config.hide_advanced && !$root.$data.metadata.preexisting_install && !advanced"
                         v-on:click="advanced = true">{{ $t('select_packages.advanced') }}</b-button>
                 </p>
                 <p class="control">
-                    <b-button class="is-dark is-medium" v-if="!$root.$data.metadata.preexisting_install"
+                    <b-button class="is-primary is-medium" v-if="!$root.$data.metadata.preexisting_install"
                         v-on:click="install">{{ $t('select_packages.install') }}</b-button>
                 </p>
                 <p class="control">
-                    <a class="button is-dark is-medium" v-if="$root.$data.metadata.preexisting_install"
+                    <a class="button is-primary is-medium" v-if="$root.$data.metadata.preexisting_install"
                         v-on:click="install">{{ repair ? $t('select_packages.repair') : $t('select_packages.modify') }}</a>
                 </p>
             </div>
@@ -67,7 +67,7 @@
 
         <div class="field is-grouped is-left-floating is-bottom-floating">
             <p class="control">
-                <b-button class="is-medium" v-if="$root.$data.metadata.preexisting_install"
+                <b-button class="is-primary is-medium" v-if="$root.$data.metadata.preexisting_install"
                     v-on:click="go_back">{{ $t('back') }}</b-button>
             </p>
         </div>

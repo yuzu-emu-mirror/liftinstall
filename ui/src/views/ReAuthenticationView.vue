@@ -18,7 +18,7 @@
 
     <div class="is-right-floating is-bottom-floating">
       <p class="control">
-        <a class="button is-dark is-medium" v-on:click="launch_old_version">Launch Old Version</a>
+        <a class="button is-info is-medium" v-on:click="launch_old_version">Launch Old Version</a>
       </p>
     </div>
   </div>
