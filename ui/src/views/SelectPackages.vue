@@ -67,7 +67,7 @@
 
         <div class="field is-grouped is-left-floating is-bottom-floating">
             <p class="control">
-                <b-button class="is-primary is-medium" v-if="$root.$data.metadata.preexisting_install"
+                <b-button class="is-dark is-medium" v-if="$root.$data.metadata.preexisting_install"
                     v-on:click="go_back">{{ $t('back') }}</b-button>
             </p>
         </div>

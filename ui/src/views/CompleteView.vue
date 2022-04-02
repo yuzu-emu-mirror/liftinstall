@@ -30,6 +30,13 @@
                 <h4 class="subtitle">{{ $t('complete.uninstalled', {'name': $root.$data.attrs.name}) }}</h4>
             </div>
 
+            <!-- show the back button when the user was repairing/installing/updating -->
+            <div class="is-left-floating is-bottom-floating" v-if="$root.$data.metadata.preexisting_install && !this.$route.params.uninstall">
+              <p class="control">
+                <b-button class="is-dark is-medium" v-on:click="go_back">{{ $t('back') }}</b-button>
+              </p>
+            </div>
+
             <div class="field is-grouped is-right-floating is-bottom-floating">
                 <p class="control">
                     <b-button class="is-primary is-medium" v-on:click="exit">{{ $t('exit') }}</b-button>
@@ -50,6 +57,9 @@ export default {
     }
   },
   methods: {
+    go_back: function () {
+      this.$router.replace('/modify')
+    },
     exit: function () {
       this.$root.exit()
     }
