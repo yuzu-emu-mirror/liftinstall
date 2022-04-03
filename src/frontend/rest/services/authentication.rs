@@ -190,7 +190,9 @@ pub fn handle(service: &WebService, _req: Request) -> InternalFuture {
                 let req = serde_json::from_slice::<AuthRequest>(&body);
                 if req.is_err() {
                     warn!("Failed to parse auth request from the frontend");
-                    return default_future(Response::new().with_status(hyper::StatusCode::BadRequest));
+                    return default_future(
+                        Response::new().with_status(hyper::StatusCode::BadRequest),
+                    );
                 }
                 let req = req.unwrap();
 

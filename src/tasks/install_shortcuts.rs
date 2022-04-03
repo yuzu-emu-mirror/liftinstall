@@ -91,7 +91,7 @@ impl Task for InstallShortcutsTask {
         let packages = &mut context.database.packages;
         for pack in packages {
             if pack.name == self.name {
-                pack.shortcuts.append(&mut installed_files);
+                pack.shortcuts.extend(installed_files.clone());
             }
         }
 

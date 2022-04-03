@@ -36,6 +36,7 @@ use crate::logging::LoggingErrors;
 
 use dirs::home_dir;
 
+use std::collections::HashSet;
 use std::fs::remove_file;
 
 use crate::http;
@@ -117,7 +118,7 @@ pub struct LocalInstallation {
     /// Relative paths to generated files
     pub files: Vec<String>,
     /// Absolute paths to generated shortcut files
-    pub shortcuts: Vec<String>,
+    pub shortcuts: HashSet<String>,
 }
 
 macro_rules! declare_messenger_callback {

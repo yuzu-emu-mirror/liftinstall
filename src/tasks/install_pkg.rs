@@ -23,6 +23,7 @@ use crate::logging::LoggingErrors;
 use crate::archives;
 
 use crate::tasks::install_desktop_shortcut::InstallDesktopShortcutTask;
+use std::collections::HashSet;
 use std::fs::OpenOptions;
 use std::path::Path;
 
@@ -172,7 +173,7 @@ impl Task for InstallPackageTask {
         context.database.packages.push(LocalInstallation {
             name: package.name,
             version,
-            shortcuts: Vec::new(),
+            shortcuts: HashSet::new(),
             files: installed_files,
         });
 

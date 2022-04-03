@@ -52,6 +52,19 @@ pub fn handle(service: &WebService, req: Request) -> Future {
             }
         }
 
+        if !install_desktop_shortcut {
+            let framework_ref = framework
+                .read()
+                .log_expect("InstallerFramework has been dirtied");
+            install_desktop_shortcut = framework_ref.preexisting_install
+                && framework_ref
+                    .database
+                    .packages
+                    .first()
+                    .and_then(|x| Some(x.shortcuts.len() > 1))
+                    .unwrap_or(false);
+        }
+
         // The frontend always provides this
         let path =
             path.log_expect("No path specified by frontend when one should have already existed");
