@@ -454,10 +454,7 @@ impl InstallerFramework {
             is_launcher: false,
             burn_after_exit: false,
             launcher_path: None,
-            #[cfg(windows)]
-            is_windows: true,
-            #[cfg(not(windows))]
-            is_windows: false,
+            is_windows: cfg!(windows),
         }
     }
 
@@ -485,10 +482,7 @@ impl InstallerFramework {
             is_launcher: false,
             burn_after_exit: false,
             launcher_path: None,
-            #[cfg(windows)]
-            is_windows: true,
-            #[cfg(not(windows))]
-            is_windows: false,
+            is_windows: cfg!(windows),
         })
     }
 }
