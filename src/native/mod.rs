@@ -314,6 +314,7 @@ mod natives {
         target: &str,
         args: &str,
         working_dir: &str,
+        exe_path: &str,
     ) -> Result<String, String> {
         // FIXME: no icon will be shown since no icon is provided
         let data_local_dir = dirs::data_local_dir();
@@ -330,10 +331,10 @@ mod natives {
                         ));
                     }
                 };
-                path.push(format!("{}.desktop", slugify(name))); // file name
+                path.push(format!("yuzu-maintenance-tool_{}.desktop", slugify(name))); // file name
                 let desktop_file = format!(
-                    "[Desktop Entry]\nName={}\nExec=\"{}\" {}\nComment={}\nPath={}\n",
-                    name, target, args, description, working_dir
+                "[Desktop Entry]\nType=Application\nName={}\nExec=\"{}\" {}\nComment={}\nPath={}\nIcon=yuzu\n",
+                name, target, args, description, working_dir
                 );
                 let desktop_f = File::create(path);
                 let mut desktop_f = match desktop_f {
