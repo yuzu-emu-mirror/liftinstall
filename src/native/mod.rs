@@ -312,7 +312,7 @@ mod natives {
         name: &str,
         description: &str,
         target: &str,
-        args: &[&str],
+        args: &str,
         working_dir: &str,
         exe_path: &str,
     ) -> Result<String, String> {

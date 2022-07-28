@@ -100,7 +100,7 @@ impl Task for InstallDesktopShortcutTask {
                 &shortcut.name,
                 &shortcut.description,
                 tool_path,
-                &["--launcher", exe_path],
+                &format!("--launcher \"{}\"", exe_path),
                 &starting_dir,
                 exe_path,
             )?);
