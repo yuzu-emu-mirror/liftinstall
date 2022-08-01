@@ -53,6 +53,6 @@ default = true
         repo = "yuzu-emu/yuzu-mainline"
     [[packages.shortcuts]]
     name = "yuzu"
-    relative_path = "yuzu-linux-mainline/yuzu"
+    relative_path = "yuzu-linux-mainline/yuzu-mainline.AppImage"
     description = "Launch yuzu"
 
