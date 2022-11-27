@@ -43,9 +43,9 @@ chrono = "0.4"
 clap = "2.33"
 
 # used to open a link to the users default browser
-webbrowser = "0.6"
+webbrowser = "0.8"
 # used in JWT based package authentication
-jsonwebtoken = "7"
+jsonwebtoken = "^8"
 # used to decode the public key for verifying JWT tokens
 base64 = "0.13"
 
@@ -59,12 +59,12 @@ image = { version = "0.24", default-features = false, features = ["ico"] }
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["psapi", "winbase", "winioctl", "winnt"] }
-widestring = "0.5"
+widestring = "^1"
 webview2 = "0.1"
 tempfile = "3"
 
 [target.'cfg(not(windows))'.dependencies]
-sysinfo = "0.23"
+sysinfo = "0.26"
 slug = "0.1"
 
 [target.'cfg(windows)'.build-dependencies]
