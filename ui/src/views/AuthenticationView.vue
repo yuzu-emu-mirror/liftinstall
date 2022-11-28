@@ -188,11 +188,11 @@ export default {
     }
   },
   directives: {
-      scroll: {
-          inserted: function (el) {
-              el.scrollIntoView()
-          }
+    scroll: {
+      inserted: function (el) {
+        el.scrollIntoView()
       }
+    }
   }
 }
 </script>

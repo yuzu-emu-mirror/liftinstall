@@ -476,6 +476,7 @@ impl InstallerFramework {
             is_launcher: false,
             burn_after_exit: false,
             launcher_path: None,
+            is_windows: cfg!(windows),
         }
     }
 
