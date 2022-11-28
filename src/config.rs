@@ -2,8 +2,6 @@
 //!
 //! Contains Config structures, as well as means of serialising them.
 
-use std::collections::HashSet;
-
 use toml;
 use toml::de::Error as TomlError;
 
@@ -68,7 +66,7 @@ pub struct PackageDescription {
 /// Configuration for validating the JWT token
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct JWTValidation {
-    pub iss: Option<HashSet<String>>,
+    pub iss: Option<String>,
     // This can technically be a Vec as well, but thats a pain to support atm
     pub aud: Option<String>,
 }

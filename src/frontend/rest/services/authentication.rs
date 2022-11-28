@@ -2,6 +2,7 @@
 //!
 //! Provides mechanisms to authenticate users using JWT.
 
+use std::collections::HashSet;
 use std::sync::Arc;
 
 use futures::{Future, Stream};
@@ -142,7 +143,11 @@ pub fn validate_token(
     let mut validation = match validation {
         Some(v) => {
             let mut valid = Validation::new(Algorithm::RS256);
-            valid.iss = v.iss;
+            valid.iss = v.iss.map(|iss| {
+                let mut issuer = HashSet::new();
+                issuer.insert(iss);
+                issuer
+            });
             if let &Some(ref v) = &v.aud {
                 valid.set_audience(&[v]);
             }
