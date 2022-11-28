@@ -56,7 +56,7 @@
       </p>
     </div>
 
-    <div class="is-right-floating is-bottom-floating">
+    <div class="is-right-floating is-bottom-floating" v-scroll>
       <p class="control">
         <b-button type="is-primary is-medium" :loading="loading" v-on:click="verify_token">{{ $t('auth.verify') }}</b-button>
       </p>
@@ -186,6 +186,13 @@ export default {
       this.verification_opened = true
       this.blink_error()
     }
+  },
+  directives: {
+      scroll: {
+          inserted: function (el) {
+              el.scrollIntoView()
+          }
+      }
   }
 }
 </script>

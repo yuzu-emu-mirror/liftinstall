@@ -30,8 +30,11 @@
         </div>
         <div class="tile is-child is-6 box clickable-box" v-if="!$root.$data.metadata.preexisting_install"  v-on:click.capture.stop="installDesktopShortcut = !installDesktopShortcut">
           <h4>{{ $t('select_packages.options') }}</h4>
-          <b-checkbox v-model="installDesktopShortcut">
+          <b-checkbox v-model="installDesktopShortcut" v-if="$root.$data.metadata.is_windows">
             {{ $t('select_packages.option_shortcut') }}
+          </b-checkbox>
+          <b-checkbox v-model="installDesktopShortcut" v-if="!$root.$data.metadata.is_windows">
+            Create Shortcut
           </b-checkbox>
         </div>
 

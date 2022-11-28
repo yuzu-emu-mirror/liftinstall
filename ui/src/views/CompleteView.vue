@@ -24,7 +24,7 @@
 
                 <p>{{ $t('complete.where_to_find') }}</p>
                 <br>
-                <img src="../assets/how-to-open.png" alt="Where yuzu is installed"/>
+                <img src="../assets/how-to-open.png" alt="Where yuzu is installed"  v-if="$root.$data.metadata.is_windows"/>
             </div>
             <div v-else>
                 <h4 class="subtitle">{{ $t('complete.uninstalled', {'name': $root.$data.attrs.name}) }}</h4>
