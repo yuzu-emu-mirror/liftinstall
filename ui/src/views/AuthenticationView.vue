@@ -134,9 +134,14 @@ export default {
     paste: function () {
       window.document.getElementById('token').focus()
       const that = this
-      window.navigator.clipboard.readText().then(function (v) {
-        that.combined_token = v.trim()
-      }).catch(function () {})
+      if ('readText' in (window.navigator.clipboard ?? {})) {
+        window.navigator.clipboard.readText().then(function (v) {
+          that.combined_token = v.trim()
+        }).catch(() => {})
+      } else {
+        this.combined_token = ''
+        document.execCommand('paste')
+      }
     },
     launch_browser: function (url) {
       const that = this
