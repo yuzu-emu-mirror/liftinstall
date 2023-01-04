@@ -2,20 +2,21 @@
 //!
 //! Launches the user's web browser on request from the frontend.
 
-use frontend::rest::services::Future as InternalFuture;
-use frontend::rest::services::{Request, Response, WebService};
+use crate::frontend::rest::services::Future as InternalFuture;
+use crate::frontend::rest::services::{Request, Response, WebService};
+use crate::logging::LoggingErrors;
 use futures::{Future, Stream};
 use hyper::header::ContentType;
-use logging::LoggingErrors;
-use std::collections::HashMap;
-use url::form_urlencoded;
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct OpenRequest {
+    url: String,
+}
 
 pub fn handle(_service: &WebService, req: Request) -> InternalFuture {
     Box::new(req.body().concat2().map(move |body| {
-        let req = form_urlencoded::parse(body.as_ref())
-            .into_owned()
-            .collect::<HashMap<String, String>>();
-        if webbrowser::open(req.get("url").log_expect("No URL to launch")).is_ok() {
+        let req: OpenRequest = serde_json::from_slice(&body).log_expect("Malformed request");
+        if webbrowser::open(&req.url).is_ok() {
             Response::new()
                 .with_status(hyper::Ok)
                 .with_header(ContentType::json())

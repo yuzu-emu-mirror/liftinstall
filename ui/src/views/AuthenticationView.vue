@@ -2,13 +2,10 @@
   <div class="column has-padding">
     <section>
     <b-message type="is-info" :active.sync="browser_opened">
-      Page opened! Check your default browser for the page, and follow the instructions there to link your patreon account.
-      When you are done, enter the token below.
+      {{ $t('auth.page_opened') }}
     </b-message>
     <b-message type="is-info" :active.sync="show_header">
-      The <strong>Early Access</strong> release channel lets you try out the latest experimental features and fixes, before they are merged into yuzu. This channel includes all regular yuzu daily updates, plus these exclusive features.
-
-      To be an Early Access member, you must be a Patreon Early Access Subscriber.
+      {{ $t('auth.page_header') }}
     </b-message>
     <div>
       If you are a subscriber, <a v-on:click="launch_browser('https://profile.yuzu-emu.org/')">click here to link your yuzu-emu.org account</a>
@@ -20,11 +17,11 @@
     <br>
 
     <section>
-      <p>Token</p>
+      <p>{{ $t('auth.token') }}</p>
       <b-field>
-        <b-input type="text" v-model="combined_token" placeholder="Token" id="token" style='width: 50em;'></b-input>
+        <b-input type="text" v-model="combined_token" :placeholder="$t('auth.token')" id="token" style='width: 80%;'></b-input>
         <p class="control">
-          <button class="button is-info" v-on:click="paste">Paste</button>
+          <b-button type="is-info" v-on:click="paste">{{ $t('auth.paste') }}</b-button>
         </p>
       </b-field>
     </section>
@@ -33,14 +30,8 @@
 
     <section>
 
-    <b-message type="is-danger" :active.sync="invalid_token">
-      Login failed!
-      Double check that your token is correct and try again
-    </b-message>
-
-    <b-message type="is-danger" :active.sync="invalid_login">
-      Login failed!
-      Double check that your token is correct and try again
+    <b-message id="invalid-token" type="is-danger" :active.sync="show_error">
+      {{ $t('auth.login_failed') }}
     </b-message>
 
     <b-message type="is-danger" :active.sync="unlinked_patreon">
@@ -61,70 +52,77 @@
 
     <div class="is-left-floating is-bottom-floating">
       <p class="control">
-        <a class="button is-medium" v-on:click="go_back">Back</a>
+        <b-button class="is-dark is-medium" v-on:click="go_back">{{ $t('back') }}</b-button>
       </p>
     </div>
 
     <div class="is-right-floating is-bottom-floating" v-scroll>
       <p class="control">
-        <a class="button is-dark is-medium" v-on:click="verify_token">Verify Token</a>
+        <b-button type="is-primary is-medium" :loading="loading" v-on:click="verify_token">{{ $t('auth.verify') }}</b-button>
       </p>
     </div>
   </div>
 </template>
 
 <script>
-
-
+const confetti = require('canvas-confetti')
 export default {
   name: 'AuthenticationView',
-  created: function() {
+  created: function () {
     // If they are already authenticated when this page is loaded,
     // then we can asssume they are "clicking here for more details" and should show the appropriate error message
     if (this.$root.is_authenticated) {
-      this.verification_opened = true;
+      this.verification_opened = true
     }
   },
-  data: function() {
+  data: function () {
     return {
       browser_opened: false,
       verification_opened: false,
       invalid_token: false,
+      loading: false
     }
   },
   computed: {
-    show_header: function() {
-      return !this.browser_opened && !this.verification_opened && !this.invalid_token;
+    show_header: function () {
+      return !this.browser_opened && !this.verification_opened
     },
-    invalid_login: function() {
-      return this.verification_opened && !this.$root.is_authenticated;
+    show_error: function () {
+      return this.invalid_login || this.invalid_token
     },
-    unlinked_patreon: function() {
-      return this.verification_opened && this.$root.is_authenticated && !this.$root.is_linked;
+    invalid_login: function () {
+      return this.verification_opened && !this.$root.is_authenticated
     },
-    no_subscription: function() {
-      return this.verification_opened && this.$root.is_linked && !this.$root.is_subscribed;
+    unlinked_patreon: function () {
+      return this.verification_opened && this.$root.is_authenticated && !this.$root.is_linked
     },
-    tier_not_selected: function() {
-      return this.verification_opened && this.$root.is_linked && this.$root.is_subscribed && !this.$root.has_reward_tier;
+    no_subscription: function () {
+      return this.verification_opened && this.$root.is_linked && !this.$root.is_subscribed
+    },
+    tier_not_selected: function () {
+      return this.verification_opened && this.$root.is_linked && this.$root.is_subscribed && !this.$root.has_reward_tier
     },
     combined_token: {
       // getter
       get: function () {
         if (this.$root.$data.username && this.$root.$data.token) {
-          return btoa(this.$root.$data.username + ":" + this.$root.$data.token)
+          return btoa(this.$root.$data.username + ':' + this.$root.$data.token)
         }
-        return "";
+        return ''
       },
       // setter
       set: function (newValue) {
+        if (!newValue || !newValue.trim()) {
+          this.invalid_token = true
+          return
+        }
         try {
-          var split = atob(newValue).split(':')
-          this.$root.$data.username = split[0];
-          this.$root.$data.token = split[1];
-          this.invalid_token = false;
+          const split = atob(newValue).split(':')
+          this.$root.$data.username = split[0]
+          this.$root.$data.token = split[1]
+          this.invalid_token = false
         } catch (e) {
-          this.invalid_token = true;
+          this.invalid_token = true
         }
       }
     }
@@ -134,45 +132,83 @@ export default {
       this.$router.go(-1)
     },
     paste: function () {
-      document.getElementById("token").focus();
-      document.execCommand("paste");
-
+      window.document.getElementById('token').focus()
+      const that = this
+      if ('readText' in (window.navigator.clipboard ?? {})) {
+        window.navigator.clipboard.readText().then(function (v) {
+          that.combined_token = v.trim()
+        }).catch(() => {})
+      } else {
+        this.combined_token = ''
+        document.execCommand('paste')
+      }
     },
-    launch_browser: function(url) {
-      const that = this;
-      let app = this.$root;
-      app.ajax('/api/open-browser', function (e) {
+    launch_browser: function (url) {
+      const that = this
+      this.$http.post('/api/open-browser', {
+        url: url
+      }).then(function () {
         // only open the browser opened message if there isn't an error message currently
         if (!that.verification_opened) {
-          that.browser_opened = true;
+          that.browser_opened = true
         }
-      }, function (e) {}, {
-        "url": url,
-      });
+      }).catch(function () {})
     },
-    verify_token: function() {
-      this.browser_opened = false;
-      this.$root.check_authentication(this.success, this.error);
+    blink_error: function () {
+      const target = document.getElementById('invalid-token')
+      target.classList.add('blink-block')
+      setTimeout(function () {
+        target.classList.remove('blink-block')
+      }, 1200)
     },
-    success: function() {
-      // if they are eligible, go back to the select package page
+    verify_token: function () {
+      if (this.invalid_token) {
+        this.blink_error()
+        return
+      }
+      this.loading = true
+      this.browser_opened = false
+      this.$root.check_authentication(this.success, this.error)
+    },
+    success: function () {
       if (this.$root.has_reward_tier) {
-        this.$router.go(-1);
-        return;
+        // show a success animation
+        confetti.default({
+          particleCount: 200,
+          spread: 90,
+          origin: { x: 0.6 }
+        })
+        // if they are eligible, go back to the select package page
+        this.$router.go(-1)
+        return
       }
       // They aren't currently eligible for the release, so display the error message
-      this.verification_opened = true;
+      this.verification_opened = true
+      this.loading = false
     },
-    error: function() {
-      this.verification_opened = true;
+    error: function () {
+      this.loading = false
+      this.verification_opened = true
+      this.blink_error()
     }
   },
   directives: {
-      scroll: {
-          inserted: function (el) {
-              el.scrollIntoView()
-          }
+    scroll: {
+      inserted: function (el) {
+        el.scrollIntoView()
       }
+    }
   }
 }
 </script>
+
+<style>
+.blink-block {
+  animation: blink 0.3s linear infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0
+  }
+}
+</style>

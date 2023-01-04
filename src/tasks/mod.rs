@@ -4,10 +4,10 @@
 use std::fmt;
 use std::fmt::Display;
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use sources::types::File;
-use sources::types::Version;
+use crate::sources::types::File;
+use crate::sources::types::Version;
 
 pub mod check_authorization;
 pub mod download_pkg;
@@ -19,6 +19,7 @@ pub mod install_global_shortcut;
 pub mod install_pkg;
 pub mod install_shortcuts;
 pub mod launch_installed_on_exit;
+pub mod remove_target_dir;
 pub mod resolver;
 pub mod save_database;
 pub mod save_executable;

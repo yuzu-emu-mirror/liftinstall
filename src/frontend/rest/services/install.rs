@@ -2,14 +2,14 @@
 //!
 //! The /api/install call installs a set of packages dictated by a POST request.
 
-use frontend::rest::services::stream_progress;
-use frontend::rest::services::Future;
-use frontend::rest::services::Request;
-use frontend::rest::services::WebService;
+use crate::frontend::rest::services::stream_progress;
+use crate::frontend::rest::services::Future;
+use crate::frontend::rest::services::Request;
+use crate::frontend::rest::services::WebService;
 
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
-use installer::InstallMessage;
+use crate::installer::InstallMessage;
 
 use futures::future::Future as _;
 use futures::stream::Stream;
@@ -28,7 +28,8 @@ pub fn handle(service: &WebService, req: Request) -> Future {
 
         let mut to_install = Vec::new();
         let mut path: Option<String> = None;
-        let mut install_desktop_shortcut= false;
+        let mut force_install = false;
+        let mut install_desktop_shortcut = false;
 
         // Transform results into just an array of stuff to install
         for (key, value) in &results {
@@ -41,9 +42,27 @@ pub fn handle(service: &WebService, req: Request) -> Future {
                 continue;
             }
 
+            if key == "mode" && value == "force" {
+                force_install = true;
+                continue;
+            }
+
             if value == "true" {
                 to_install.push(key.to_owned());
             }
+        }
+
+        if !install_desktop_shortcut {
+            let framework_ref = framework
+                .read()
+                .log_expect("InstallerFramework has been dirtied");
+            install_desktop_shortcut = framework_ref.preexisting_install
+                && framework_ref
+                    .database
+                    .packages
+                    .first()
+                    .and_then(|x| Some(x.shortcuts.len() > 1))
+                    .unwrap_or(false);
         }
 
         // The frontend always provides this
@@ -60,7 +79,13 @@ pub fn handle(service: &WebService, req: Request) -> Future {
                 framework.set_install_dir(&path);
             }
 
-            if let Err(v) = framework.install(to_install, &sender, new_install, install_desktop_shortcut) {
+            if let Err(v) = framework.install(
+                to_install,
+                &sender,
+                new_install,
+                install_desktop_shortcut,
+                force_install,
+            ) {
                 error!("Install error occurred: {:?}", v);
                 if let Err(v) = sender.send(InstallMessage::Error(v)) {
                     error!("Failed to send install error: {:?}", v);

@@ -2,21 +2,20 @@
 //! If theres multiple launchable packages, then choose the first listed in config
 //! If there are multiple shortcuts for the first package, then launch the first.
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use tasks::Task;
-use tasks::TaskDependency;
-use tasks::TaskMessage;
-use tasks::TaskParamType;
+use crate::tasks::Task;
+use crate::tasks::TaskDependency;
+use crate::tasks::TaskMessage;
+use crate::tasks::TaskParamType;
 
-use config::PackageDescription;
+use crate::config::PackageDescription;
 
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
 pub struct LaunchOnExitTask {}
 
 impl Task for LaunchOnExitTask {
-
     fn execute(
         &mut self,
         _: Vec<TaskParamType>,
@@ -25,7 +24,7 @@ impl Task for LaunchOnExitTask {
     ) -> Result<TaskParamType, String> {
         let pkg = &context.database.packages.first();
         if pkg.is_none() {
-            return Ok(TaskParamType::None)
+            return Ok(TaskParamType::None);
         }
         let pkg = pkg.unwrap();
 
@@ -41,12 +40,12 @@ impl Task for LaunchOnExitTask {
             .as_ref()
             .log_expect("Should have packages by now")
             .packages
-            {
-                if pkg.name == description.name {
-                    metadata = Some(description.clone());
-                    break;
-                }
+        {
+            if pkg.name == description.name {
+                metadata = Some(description.clone());
+                break;
             }
+        }
 
         let package_desc = match metadata {
             Some(v) => v,
@@ -58,7 +57,10 @@ impl Task for LaunchOnExitTask {
 
         // copy the path to the actual exe into launcher_path so it'll load it on exit
         context.launcher_path = shortcut.map(|s| {
-            path.join(s.relative_path.clone()).to_str().map(|t| { t.to_string() }).unwrap()
+            path.join(s.relative_path.clone())
+                .to_str()
+                .map(|t| t.to_string())
+                .unwrap()
         });
 
         Ok(TaskParamType::None)

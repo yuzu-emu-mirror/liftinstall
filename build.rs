@@ -12,6 +12,7 @@ extern crate toml;
 extern crate which;
 
 use std::env;
+use std::io::Write;
 use std::path::PathBuf;
 
 use std::fs::copy;
@@ -21,6 +22,8 @@ use std::io::Read;
 use std::process::Command;
 
 use std::env::consts::OS;
+
+use image::imageops::FilterType;
 
 /// Describes the application itself.
 #[derive(Debug, Deserialize)]
@@ -46,6 +49,8 @@ fn handle_binary(config: &BaseAttributes) {
 
     cc::Build::new()
         .cpp(true)
+        .define("_WIN32_WINNT", Some("0x0600"))
+        .define("WINVER", Some("0x0600"))
         .file("src/native/interop.cpp")
         .compile("interop");
 }
@@ -59,6 +64,13 @@ fn main() {
     let ui_dir = current_dir.join("ui");
 
     let os = OS.to_lowercase();
+
+    #[cfg(windows)]
+    {
+        if std::fs::metadata("MicrosoftEdgeWebview2Setup.exe").is_err() {
+            panic!("Please download MicrosoftEdgeWebview2Setup.exe from https://go.microsoft.com/fwlink/p/?LinkId=2124703 and put the file at the workspace root!");
+        }
+    }
 
     // Find target config
     let target_config = PathBuf::from(format!("bootstrap.{}.toml", os));
@@ -90,6 +102,14 @@ fn main() {
     let yarn_binary =
         which::which("yarn").expect("Failed to find yarn - please go ahead and install it!");
 
+    // bundle the icon
+    let mut f = File::create(output_dir.join("icon-data.bin")).unwrap();
+    let icon_file = image::open("ui/public/favicon.ico").expect("Unable to read the icon file");
+    let icon_data = icon_file
+        .resize_exact(48, 48, FilterType::Triangle)
+        .to_rgba8();
+    f.write_all(&icon_data.into_vec()).unwrap();
+
     // Build and deploy frontend files
     Command::new(&yarn_binary)
         .arg("--version")
@@ -102,7 +122,7 @@ fn main() {
         .unwrap()
         .wait()
         .expect("Unable to install Node.JS dependencies using Yarn");
-    Command::new(&yarn_binary)
+    let return_code = Command::new(&yarn_binary)
         .args(&[
             "--cwd",
             ui_dir.to_str().expect("Unable to covert path"),
@@ -114,8 +134,7 @@ fn main() {
                 .to_str()
                 .expect("Unable to convert path"),
         ])
-        .spawn()
-        .unwrap()
-        .wait()
+        .status()
         .expect("Unable to build frontend assets using Webpack");
+    assert!(return_code.success());
 }

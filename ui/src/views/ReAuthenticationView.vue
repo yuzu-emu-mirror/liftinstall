@@ -12,13 +12,13 @@
 
     <div class="is-left-floating is-bottom-floating">
       <p class="control">
-        <a class="button is-medium" v-on:click="go_packages">Back</a>
+        <a class="button is-medium" v-on:click="go_packages">{{ $t('back') }}</a>
       </p>
     </div>
 
     <div class="is-right-floating is-bottom-floating">
       <p class="control">
-        <a class="button is-dark is-medium" v-on:click="launch_old_version">Launch Old Version</a>
+        <a class="button is-info is-medium" v-on:click="launch_old_version">Launch Old Version</a>
       </p>
     </div>
   </div>
@@ -26,20 +26,20 @@
 </template>
 
 <script>
-  export default {
-    name: "ReAuthenticationView",
-    methods: {
-      go_authenticate: function() {
-        this.$router.replace('/authentication')
-      },
-      launch_old_version: function () {
-        this.$root.exit()
-      },
-      go_packages: function () {
-        this.$router.push('/packages')
-      }
+export default {
+  name: 'ReAuthenticationView',
+  methods: {
+    go_authenticate: function () {
+      this.$router.replace('/authentication')
+    },
+    launch_old_version: function () {
+      this.$root.exit()
+    },
+    go_packages: function () {
+      this.$router.push('/packages')
     }
   }
+}
 </script>
 
 <style scoped>

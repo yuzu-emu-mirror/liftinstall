@@ -21,28 +21,29 @@ use std::io::Cursor;
 use std::process::Command;
 use std::process::{exit, Stdio};
 
-use config::BaseAttributes;
-use config::Config;
+use crate::config::BaseAttributes;
+use crate::config::Config;
 
-use sources::types::Version;
+use crate::sources::types::Version;
 
-use tasks::install::InstallTask;
-use tasks::uninstall::UninstallTask;
-use tasks::uninstall_global_shortcut::UninstallGlobalShortcutsTask;
-use tasks::DependencyTree;
-use tasks::TaskMessage;
+use crate::tasks::install::InstallTask;
+use crate::tasks::uninstall::UninstallTask;
+use crate::tasks::uninstall_global_shortcut::UninstallGlobalShortcutsTask;
+use crate::tasks::DependencyTree;
+use crate::tasks::TaskMessage;
 
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
 use dirs::home_dir;
 
+use std::collections::HashSet;
 use std::fs::remove_file;
 
-use http;
+use crate::http;
 
-use number_prefix::{NumberPrefix, Prefixed, Standalone};
+use number_prefix::NumberPrefix::{self, Prefixed, Standalone};
 
-use native;
+use crate::native;
 
 /// A message thrown during the installation of packages.
 #[derive(Serialize)]
@@ -118,7 +119,7 @@ pub struct LocalInstallation {
     /// Relative paths to generated files
     pub files: Vec<String>,
     /// Absolute paths to generated shortcut files
-    pub shortcuts: Vec<String>,
+    pub shortcuts: HashSet<String>,
 }
 
 macro_rules! declare_messenger_callback {
@@ -175,12 +176,14 @@ impl InstallerFramework {
     /// items: Array of named packages to be installed/kept
     /// messages: Channel used to send progress messages
     /// fresh_install: If the install directory must be empty
+    /// force_install: If the install directory should be erased first
     pub fn install(
         &mut self,
         items: Vec<String>,
         messages: &Sender<InstallMessage>,
         fresh_install: bool,
         create_desktop_shortcuts: bool,
+        force_install: bool,
     ) -> Result<(), String> {
         info!(
             "Framework: Installing {:?} to {:?}",
@@ -210,6 +213,7 @@ impl InstallerFramework {
             uninstall_items,
             fresh_install,
             create_desktop_shortcuts,
+            force_install,
         });
 
         let mut tree = DependencyTree::build(task);
@@ -451,6 +455,24 @@ impl InstallerFramework {
             database: InstallationDatabase::new(),
             install_path: None,
             preexisting_install: false,
+            is_launcher: false,
+            burn_after_exit: false,
+            launcher_path: None,
+            is_windows: cfg!(windows),
+        }
+    }
+
+    /// The special recovery mode for the Installer Framework.
+    pub fn new_recovery_mode(attrs: BaseAttributes, install_path: &Path) -> Self {
+        InstallerFramework {
+            base_attributes: BaseAttributes {
+                recovery: true,
+                ..attrs
+            },
+            config: None,
+            database: InstallationDatabase::new(),
+            install_path: Some(install_path.to_path_buf()),
+            preexisting_install: true,
             is_launcher: false,
             burn_after_exit: false,
             launcher_path: None,

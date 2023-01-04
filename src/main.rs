@@ -7,7 +7,7 @@
 #![deny(unsafe_code)]
 #![deny(missing_docs)]
 
-extern crate web_view;
+extern crate wry;
 
 extern crate futures;
 extern crate hyper;
@@ -71,10 +71,10 @@ use clap::App;
 use clap::Arg;
 
 use config::BaseAttributes;
-use std::process::{Command, Stdio, exit};
 use std::fs;
+use std::process::{exit, Command, Stdio};
 
-static RAW_CONFIG: &'static str = include_str!(concat!(env!("OUT_DIR"), "/bootstrap.toml"));
+const RAW_CONFIG: &str = include_str!(concat!(env!("OUT_DIR"), "/bootstrap.toml"));
 
 fn main() {
     let config = BaseAttributes::from_toml_str(RAW_CONFIG).expect("Config file could not be read");
@@ -109,6 +109,7 @@ fn main() {
 
     info!("{} installer", app_name);
 
+    // Handle self-updating if needed
     let current_exe = std::env::current_exe().log_expect("Current executable could not be found");
     let current_path = current_exe
         .parent()
@@ -126,7 +127,11 @@ fn main() {
     let metadata_file = current_path.join("metadata.json");
     let mut framework = if metadata_file.exists() {
         info!("Using pre-existing metadata file: {:?}", metadata_file);
-        InstallerFramework::new_with_db(config, current_path).log_expect("Unable to parse metadata")
+        InstallerFramework::new_with_db(config.clone(), current_path).unwrap_or_else(|e| {
+            error!("Failed to load metadata: {:?}", e);
+            warn!("Entering recovery mode");
+            InstallerFramework::new_recovery_mode(config, current_path)
+        })
     } else {
         info!("Starting fresh install");
         fresh_install = true;
@@ -171,12 +176,17 @@ fn replace_existing_install(current_exe: &PathBuf, installed_path: &PathBuf) -> 
         return Err(format!("Unable to copy installer binary: {:?}", v));
     }
 
-    let existing = installed_path.join(platform_extension).into_os_string().into_string();
+    let existing = installed_path
+        .join(platform_extension)
+        .into_os_string()
+        .into_string();
     let new = installed_path.join(new_tool).into_os_string().into_string();
     if existing.is_ok() && new.is_ok() {
         // Remove NTFS alternate stream which tells the operating system that the updater was downloaded from the internet
         if cfg!(windows) {
-            let _ = fs::remove_file(installed_path.join("maintenancetool_new.exe:Zone.Identifier:$DATA"));
+            let _ = fs::remove_file(
+                installed_path.join("maintenancetool_new.exe:Zone.Identifier:$DATA"),
+            );
         }
         info!("Launching {:?}", existing);
         let success = Command::new(new.unwrap())

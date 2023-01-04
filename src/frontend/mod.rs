@@ -4,8 +4,8 @@
 
 use std::sync::{Arc, RwLock};
 
-use installer::InstallerFramework;
-use logging::LoggingErrors;
+use crate::installer::InstallerFramework;
+use crate::logging::LoggingErrors;
 
 pub mod rest;
 mod ui;
@@ -16,7 +16,7 @@ pub fn launch(app_name: &str, is_launcher: bool, framework: InstallerFramework) 
 
     let (servers, address) = rest::server::spawn_servers(framework.clone());
 
-    ui::start_ui(app_name, &address, is_launcher);
+    ui::start_ui(app_name, &address, is_launcher).log_expect("Failed to start UI");
 
     // Explicitly hint that we want the servers instance until here.
     drop(servers);

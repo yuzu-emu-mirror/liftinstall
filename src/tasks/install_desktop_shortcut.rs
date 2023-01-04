@@ -1,20 +1,20 @@
 //! Generates shortcuts for a specified file.
 
-use installer::InstallerFramework;
+use crate::installer::InstallerFramework;
 
-use tasks::Task;
-use tasks::TaskDependency;
-use tasks::TaskMessage;
-use tasks::TaskParamType;
+use crate::tasks::Task;
+use crate::tasks::TaskDependency;
+use crate::tasks::TaskMessage;
+use crate::tasks::TaskParamType;
 
-use config::PackageDescription;
+use crate::config::PackageDescription;
 
-use logging::LoggingErrors;
+use crate::logging::LoggingErrors;
 
 #[cfg(windows)]
-use native::create_desktop_shortcut;
+use crate::native::create_desktop_shortcut;
 #[cfg(target_os = "linux")]
-use native::create_shortcut;
+use crate::native::create_shortcut;
 
 pub struct InstallDesktopShortcutTask {
     pub name: String,
@@ -33,7 +33,10 @@ impl Task for InstallDesktopShortcutTask {
         }
 
         messenger(&TaskMessage::DisplayMessage(
-            &format!("Generating desktop shortcuts for package {:?}...", self.name),
+            &format!(
+                "Generating desktop shortcuts for package {:?}...",
+                self.name
+            ),
             0.0,
         ));
 
@@ -54,12 +57,12 @@ impl Task for InstallDesktopShortcutTask {
             .as_ref()
             .log_expect("Should have packages by now")
             .packages
-            {
-                if self.name == description.name {
-                    metadata = Some(description.clone());
-                    break;
-                }
+        {
+            if self.name == description.name {
+                metadata = Some(description.clone());
+                break;
             }
+        }
 
         let package = match metadata {
             Some(v) => v,
@@ -110,7 +113,7 @@ impl Task for InstallDesktopShortcutTask {
         let packages = &mut context.database.packages;
         for pack in packages {
             if pack.name == self.name {
-                pack.shortcuts.append(&mut installed_files);
+                pack.shortcuts.extend(installed_files.clone());
             }
         }
 
@@ -122,6 +125,9 @@ impl Task for InstallDesktopShortcutTask {
     }
 
     fn name(&self) -> String {
-        format!("InstallDesktopShortcutTask (for {:?}, should_run = {:?})", self.name, self.should_run)
+        format!(
+            "InstallDesktopShortcutTask (for {:?}, should_run = {:?})",
+            self.name, self.should_run
+        )
     }
 }

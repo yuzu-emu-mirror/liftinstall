@@ -7,8 +7,8 @@ use toml::de::Error as TomlError;
 
 use serde_json::{self, Error as SerdeError};
 
-use sources::get_by_name;
-use sources::types::Release;
+use crate::sources::get_by_name;
+use crate::sources::types::Release;
 
 /// Description of the source of a package.
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -84,6 +84,8 @@ pub struct AuthenticationConfig {
 pub struct BaseAttributes {
     pub name: String,
     pub target_url: String,
+    #[serde(default)]
+    pub recovery: bool,
 }
 
 impl BaseAttributes {
